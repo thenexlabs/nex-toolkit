@@ -5,6 +5,12 @@ on:
     paths:
       - "packages/ui/**"
       - ".github/workflows/ui.yml"
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish @thenexlabs/ui to GitHub Packages"
+        type: boolean
+        default: false
 
 jobs:
   test:
@@ -30,3 +36,25 @@ jobs:
       - name: Build
         working-directory: ${{ runner.temp }}/ui
         run: npm run build
+
+  publish:
+    if: github.event_name == 'workflow_dispatch' && inputs.publish && github.ref == 'refs/heads/master'
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://npm.pkg.github.com
+          scope: "@thenexlabs"
+      - name: Isolate package
+        run: cp -r packages/ui "$RUNNER_TEMP/ui"
+      - name: Install, build, publish
+        working-directory: ${{ runner.temp }}/ui
+        run: npm install --no-audit --no-fund && npm run build && npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
