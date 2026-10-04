@@ -70,6 +70,7 @@ The preset only *adds* new names, so no existing classes change. The exception i
 | Radius by role | `rounded-badge` `rounded-control` `rounded-card` `rounded-modal` `rounded-pill` |
 | Elevation / glow | `shadow-elevation-sm` `shadow-elevation-md` `shadow-elevation-lg` `shadow-glow-sm` `shadow-glow-md` `shadow-glow-lg` `shadow-focus` |
 | Layers | `z-dropdown` `z-sticky` `z-overlay` `z-modal` `z-toast` `z-tooltip` |
+| Type | `font-sans` (Public Sans) `font-mono` (JetBrains Mono) `tracking-caps`. Use `.nex-data` (from base.css) for tabular mono numbers. |
 | Motion | `duration-fast` `duration-base` `duration-slow` `ease-standard` `ease-enter` `ease-exit` |
 
 Every colour role X follows the same pattern. `X` is the fill, `on-X` is text placed on that fill, and `X-text` is X-coloured text on the page background. For example, `text-accent-text` is neon `#00FF41` in dark mode but `#007A1F` in light mode, because neon on white is unreadable at 1.4:1.

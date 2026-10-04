@@ -105,6 +105,7 @@ test("generated outputs exist and load", () => {
   const preset = require("../dist/tailwind-preset.cjs");
   assert.equal(preset.theme.extend.colors.accent, "rgb(var(--nex-color-accent) / <alpha-value>)");
   assert.ok(preset.theme.extend.fontFamily.sans);
+  assert.equal(preset.theme.extend.letterSpacing.caps, "var(--nex-tracking-caps)");
   const ns = preset.createNexPreset({ colorNamespace: "nex", fonts: false });
   assert.ok(ns.theme.extend.colors.nex.accent);
   assert.equal(ns.theme.extend.fontFamily, undefined);

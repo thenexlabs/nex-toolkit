@@ -265,6 +265,8 @@ const fontSize = ${JSON.stringify(T.typography.fontSize, null, 2)};
 const zIndex = ${JSON.stringify(Object.fromEntries(Object.entries(T.zIndex).map(([k, v]) => [k, String(v)])), null, 2)};
 const duration = ${JSON.stringify(T.motion.duration, null, 2)};
 const easing = ${JSON.stringify(T.motion.easing, null, 2)};
+// Only 'caps' is added: Tailwind already owns tight/normal/wide.
+const letterSpacing = { caps: "var(--${PREFIX}-tracking-caps)" };
 
 /**
  * Build the NEX Tailwind preset.
@@ -285,6 +287,7 @@ function createNexPreset(options = {}) {
     zIndex,
     transitionDuration: duration,
     transitionTimingFunction: easing,
+    letterSpacing,
   };
   if (fonts) {
     extend.fontFamily = {
