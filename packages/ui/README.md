@@ -6,9 +6,13 @@ React 18 primitives for every NEX site, styled with Tailwind classes from the `@
 
 | Component | Status |
 |---|---|
-| `Button` | ✅ v0.1 |
-| `Badge` | ✅ v0.1 |
-| Input, Card, Modal, Toast, Table | Planned, in that order. See `knowledge/04-ui-direction.md`. |
+| `Button` | ✅ |
+| `Badge` | ✅ |
+| `Input`, `Field` | ✅ |
+| `Card` (`CardHeader`, `CardTitle`, `CardDescription`, `CardBody`, `CardFooter`) | ✅ |
+| `Modal` (Radix Dialog: focus trap, Esc, aria) | ✅ |
+| `Toast` (`<Toaster />` + `toast()`) | ✅ |
+| `Table` (`TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell numeric`, `TableCaption`) | ✅ |
 
 ## Setup in a site
 
@@ -76,6 +80,45 @@ import { Badge } from "@thenexlabs/ui";
 Badges aren't interactive. For something clickable, use a Button.
 
 **Rules:** status tones (`success`, `warning`, `danger`) are for status only. The label must make sense without colour, so write "Failing", not just a red dot.
+
+## Input, Card, Modal, Toast, Table
+
+```tsx
+import {
+  Field, Input, Card, CardHeader, CardTitle, CardBody, Table, TableHeader, TableBody,
+  TableRow, TableHead, TableCell, Modal, ModalTrigger, ModalContent, ModalHeader,
+  ModalTitle, ModalDescription, ModalFooter, ModalClose, Toaster, toast, Button,
+} from "@thenexlabs/ui";
+
+<Field label="API key" hint="Starts with nx_" error={err}><Input mono /></Field>
+
+<Card interactive>
+  <CardHeader><CardTitle>SOC 2</CardTitle></CardHeader>
+  <CardBody>…</CardBody>
+</Card>
+
+<Table>
+  <TableHeader><TableRow><TableHead>Control</TableHead><TableHead numeric>Evidence</TableHead></TableRow></TableHeader>
+  <TableBody><TableRow><TableCell>CC6.1</TableCell><TableCell numeric>42 / 42</TableCell></TableRow></TableBody>
+</Table>
+
+<Modal>
+  <ModalTrigger asChild><Button variant="danger">Rotate key</Button></ModalTrigger>
+  <ModalContent size="sm">
+    <ModalHeader><ModalTitle>Rotate API key?</ModalTitle><ModalDescription>The old key stops working immediately.</ModalDescription></ModalHeader>
+    <ModalFooter>
+      <ModalClose asChild><Button variant="secondary">Cancel</Button></ModalClose>
+      <Button variant="danger">Rotate</Button>
+    </ModalFooter>
+  </ModalContent>
+</Modal>
+
+// root layout, once:
+<Toaster />
+// anywhere:
+toast.success("Evidence uploaded");
+toast.danger("Scan failed", { description: "Retry in a minute." });
+```
 
 ## Develop
 
