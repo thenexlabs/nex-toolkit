@@ -6,15 +6,15 @@ Read this file first. After that, read `BRAND.md` and the relevant file in `know
 
 ## Hard rules
 
-1. **One task = one branch = one worktree.** Never work directly in the main checkout.
+1. **One task = one branch = one worktree.** Never work directly in the main checkout. Worktrees live **inside** the repo in `.worktrees/` (git-ignored), never beside it:
    ```bash
    git fetch origin
-   git worktree add ../nex-toolkit-<slug> -b <type>/<slug> origin/master
-   cd ../nex-toolkit-<slug>
+   git worktree add .worktrees/<slug> -b <type>/<slug> origin/master
+   cd .worktrees/<slug>
    # ...work, commit, push the branch, open a PR...
-   git worktree remove ../nex-toolkit-<slug>   # after merge
+   cd ../.. && git worktree remove .worktrees/<slug>   # after merge
    ```
-   `<type>` is one of `feat`, `fix`, `docs`, `chore`, `refactor` or `test`. `<slug>` is kebab-case, for example `feat/button-primitive`.
+   `<type>` is one of `feat`, `fix`, `docs`, `chore`, `refactor` or `test`. `<slug>` is kebab-case, for example `feat/button-primitive` lives in `.worktrees/button-primitive`.
 2. **Never push to `master`** (this repo's default branch). Don't force-push shared branches. Every change lands through a PR.
 3. **Small PRs.** Each PR does one thing: one component, one token change, or one doc. Aim for less than about 400 changed lines, excluding generated or lock files. If a task grows, split it into stacked PRs.
 4. **Never read `.env` files.** That includes `.env`, `.env.*`, `*.env` and any other secrets file. Don't `cat`, `grep`, open or summarise them, and don't add them to commits or prompts. If you need a value, ask a human. Only `.env.example`, which holds no real values, may be read or edited.
