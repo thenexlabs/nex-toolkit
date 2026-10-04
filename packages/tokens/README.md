@@ -4,6 +4,17 @@ NEX Level Labs design tokens, the single source of truth for colour, type, spaci
 
 The source lives in `src/tokens.mjs`. Everything in `dist/` is generated from it. Don't edit `dist/`.
 
+## Brands and modes
+
+Every brand uses the **same token names** with different values, so one component library serves every site.
+
+| Brand | Opt in | Accent | Canvas | Fonts |
+|---|---|---|---|---|
+| **NEX Level Labs** (default) | nothing | Neon `#00FF41`, glow `#39FF14` | Black `#000000` | Public Sans, JetBrains Mono |
+| **NixGuard** | `<html data-brand="nixguard">` | Emerald `#16A36A`, hover Signal `#45E59A` | Carbon `#0B0D0C` | Geist, Geist Mono, plus a condensed serif `font-display` for marketing headlines |
+
+Dark is the default mode. `data-theme="light"` switches to light, either on `<html>` or **on any section**. A light band on a dark landing page is just `<section data-theme="light">`.
+
 | Export | What it is |
 |---|---|
 | `@thenexlabs/tokens/tokens.css` | CSS custom properties (`--nex-*`). Dark is the default; `data-theme="light"` (or `.light`) swaps to light. **Defines variables only and styles nothing.** |
@@ -34,13 +45,24 @@ yarn add @thenexlabs/tokens
 import "@thenexlabs/tokens/tokens.css";
 ```
 
-**2. Fonts.** Use `next/font` and expose the variables the tokens look for.
+**2. Fonts.** Use `next/font` and expose the variables the tokens look for. Put the classes on **`<html>`**, not `<body>`, because the token variables resolve there.
 
 ```tsx
+// NEX Level Labs
 import { Public_Sans, JetBrains_Mono } from "next/font/google";
 const sans = Public_Sans({ subsets: ["latin"], variable: "--nex-font-public-sans", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--nex-font-jetbrains-mono", display: "swap" });
 // <html data-theme="dark" className={`${sans.variable} ${mono.variable}`}>
+```
+
+```tsx
+// NixGuard (yarn add geist)
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
+import { Instrument_Serif } from "next/font/google"; // placeholder display face, see BRAND.md
+const display = Instrument_Serif({ subsets: ["latin"], weight: "400", variable: "--nex-font-display-serif", display: "swap" });
+// The tokens pick up GeistSans/GeistMono's own --font-geist-sans / --font-geist-mono automatically.
+// <html data-brand="nixguard" data-theme="dark" className={`${GeistSans.variable} ${GeistMono.variable} ${display.variable}`}>
 ```
 
 **3. Tailwind preset.**
@@ -53,7 +75,7 @@ module.exports = {
 };
 ```
 
-The preset only *adds* new names, so no existing classes change. The exception is `font-sans` and `font-mono`, which switch to Public Sans and JetBrains Mono. To hold that back for now, use `require("@thenexlabs/tokens/tailwind").createNexPreset({ fonts: false })`. If any colour names collide with ones you already have, use `createNexPreset({ colorNamespace: "nex" })`. That turns `bg-accent` into `bg-nex-accent`.
+The preset only *adds* new names (including `font-display`), so no existing classes change. The exception is `font-sans` and `font-mono`, which switch to Public Sans and JetBrains Mono. To hold that back for now, use `require("@thenexlabs/tokens/tailwind").createNexPreset({ fonts: false })`. If any colour names collide with ones you already have, use `createNexPreset({ colorNamespace: "nex" })`. That turns `bg-accent` into `bg-nex-accent`.
 
 **4. Base styles (optional, later).** `import "@thenexlabs/tokens/base.css"` once you want the design system to own body colour, fonts and the focus ring.
 
@@ -70,7 +92,7 @@ The preset only *adds* new names, so no existing classes change. The exception i
 | Radius by role | `rounded-badge` `rounded-control` `rounded-card` `rounded-modal` `rounded-pill` |
 | Elevation / glow | `shadow-elevation-sm` `shadow-elevation-md` `shadow-elevation-lg` `shadow-glow-sm` `shadow-glow-md` `shadow-glow-lg` `shadow-focus` |
 | Layers | `z-dropdown` `z-sticky` `z-overlay` `z-modal` `z-toast` `z-tooltip` |
-| Type | `font-sans` (Public Sans) `font-mono` (JetBrains Mono) `tracking-caps`. Use `.nex-data` (from base.css) for tabular mono numbers. |
+| Type | `font-sans` `font-mono` `font-display` (marketing headlines only) `tracking-caps` `text-6xl` `text-7xl`. Use `.nex-data` (from base.css) for tabular mono numbers. |
 | Motion | `duration-fast` `duration-base` `duration-slow` `ease-standard` `ease-enter` `ease-exit` |
 
 Every colour role X follows the same pattern. `X` is the fill, `on-X` is text placed on that fill, and `X-text` is X-coloured text on the page background. For example, `text-accent-text` is neon `#00FF41` in dark mode but `#007A1F` in light mode, because neon on white is unreadable at 1.4:1.
@@ -101,6 +123,7 @@ The old kit appends hex alpha to its colours (for example `${colors.text}99`), s
 import { dark } from "@nextechlabs/nexdex-uikit";
 import { toLegacyKitColors } from "@thenexlabs/tokens";
 <ThemeProvider theme={{ ...dark, colors: toLegacyKitColors("dark") }}>
+// NixGuard values: toLegacyKitColors("dark", "nixguard")
 ```
 
 ## Changing a token

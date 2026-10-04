@@ -10,8 +10,14 @@
  *   2. semantic    — role-based tokens (canvas, fg, accent, danger...). Per mode.
  *   3. component   — a few role tokens for shared primitives (radius per role).
  *
- * Brand rules (see BRAND.md): black + neon green. #00FF41 is the accent,
- * #39FF14 is hover/glow. No cyan, anywhere — scripts/check.mjs enforces it.
+ * Brands: the same semantic token NAMES are filled with different VALUES per
+ * brand, so one component library serves every site.
+ *   nex       NEX Level Labs — black + neon green (#00FF41, glow #39FF14). Default.
+ *   nixguard  NixGuard — Carbon + Emerald (#16A36A), Geist. Opt in with
+ *             <html data-brand="nixguard">.
+ * Modes: dark is default; data-theme="light" swaps (on <html> or any section).
+ *
+ * No cyan, in any brand — scripts/check.mjs enforces it. See BRAND.md.
  */
 
 /* ------------------------------------------------------------------ */
@@ -50,6 +56,32 @@ export const palette = {
   },
   red: { 400: "#FF4D4D", 600: "#D92020", 700: "#C41C1C" },
   amber: { 400: "#FFB800", 800: "#8A5F00" },
+  // NixGuard brand board (2026-09). Named swatches first, derived steps after.
+  nixguard: {
+    emerald: "#16A36A", // Nix Emerald — primary accent fill
+    fortress: "#08734B", // Fortress Green — accent text on light
+    signal: "#45E59A", // Signal Green — hover, accent text on dark, "protected"
+    carbon: "#0B0D0C", // Carbon — dark canvas
+    graphite: "#141816", // Graphite — dark surface
+    iron: "#27302B", // Iron — dark lines
+    bone: "#F5F7F5", // Bone — light surface, dark-mode text
+    mist: "#A5AEA9", // Mist — muted text on dark
+    amber: "#F2B84B", // Amber — warning
+    red: "#E05252", // Signal Red — danger on dark
+    // derived (not on the board; tuned for contrast)
+    raised: "#1A1F1C",
+    sunken: "#070908",
+    ironStrong: "#3A453E",
+    stone: "#8A938E",
+    slate: "#4A524D",
+    pebble: "#5E6762",
+    fog: "#B5BDB8",
+    haze: "#DDE2DE",
+    haze2: "#BFC7C2",
+    chalk: "#ECEFEC",
+    redDeep: "#C43B3B",
+    redInk: "#B03030",
+  },
 };
 
 export const typography = {
@@ -58,6 +90,8 @@ export const typography = {
     // otherwise the named family (Google Fonts / self-hosted) is used.
     sans: ["var(--nex-font-public-sans, 'Public Sans')", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
     mono: ["var(--nex-font-jetbrains-mono, 'JetBrains Mono')", "ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", "monospace"],
+    // Marketing headlines only. NEX has no separate display face.
+    display: ["var(--nex-font-public-sans, 'Public Sans')", "ui-sans-serif", "system-ui", "sans-serif"],
   },
   fontWeight: { regular: 400, medium: 500, semibold: 600, bold: 700 },
   // [font-size, line-height] — names match Tailwind's so nothing shifts on adoption.
@@ -71,6 +105,9 @@ export const typography = {
     "3xl": ["1.875rem", "2.25rem"],
     "4xl": ["2.25rem", "2.5rem"],
     "5xl": ["3rem", "3.5rem"],
+    // Hero sizes for marketing pages (Tailwind's own values).
+    "6xl": ["3.75rem", "1"],
+    "7xl": ["4.5rem", "1"],
   },
   letterSpacing: { tight: "-0.02em", normal: "0", wide: "0.04em", caps: "0.08em" },
 };
@@ -263,3 +300,116 @@ export const contrastPairs = [
   ["focus", "canvas", 3],
   ["line-strong", "canvas", 1.3],
 ];
+
+/* ------------------------------------------------------------------ */
+/* Brands                                                              */
+/* ------------------------------------------------------------------ */
+
+const ng = palette.nixguard;
+
+export const brands = {
+  nex: {
+    label: "NEX Level Labs",
+    fontFamily: typography.fontFamily,
+    modes,
+  },
+  nixguard: {
+    label: "NixGuard",
+    fontFamily: {
+      sans: ["var(--nex-font-geist, var(--font-geist-sans, 'Geist'))", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
+      mono: ["var(--nex-font-geist-mono, var(--font-geist-mono, 'Geist Mono'))", "ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", "monospace"],
+      // Condensed serif for MARKETING headlines only (landing page). Face is a
+      // placeholder until the final font is confirmed — swap the name here.
+      display: ["var(--nex-font-display-serif, 'Instrument Serif')", "ui-serif", "Georgia", "Times New Roman", "serif"],
+    },
+    modes: {
+      // Product app + dark marketing sections.
+      dark: {
+        color: {
+          canvas: ng.carbon,
+          surface: ng.graphite,
+          raised: ng.raised,
+          sunken: ng.sunken,
+          fg: ng.bone,
+          "fg-muted": ng.mist,
+          "fg-subtle": ng.stone,
+          "fg-disabled": ng.slate,
+          line: ng.iron,
+          "line-strong": ng.ironStrong,
+          accent: ng.emerald,
+          "accent-hover": ng.signal,
+          "on-accent": palette.neutral[1000],
+          "accent-text": ng.signal,
+          success: ng.emerald,
+          "on-success": palette.neutral[1000],
+          "success-text": ng.signal,
+          warning: ng.amber,
+          "on-warning": palette.neutral[1000],
+          "warning-text": ng.amber,
+          danger: ng.red,
+          "on-danger": palette.neutral[1000],
+          "danger-text": ng.red,
+          info: ng.mist,
+          "on-info": palette.neutral[1000],
+          "info-text": ng.mist,
+          focus: ng.signal,
+          scrim: palette.neutral[1000],
+        },
+        shadow: {
+          "elevation-sm": "0 1px 2px 0 rgb(0 0 0 / 0.5)",
+          "elevation-md": "0 4px 12px -2px rgb(0 0 0 / 0.6)",
+          "elevation-lg": "0 12px 32px -4px rgb(0 0 0 / 0.7)",
+          // NixGuard has no neon bloom: "glow" is a quiet emerald ring.
+          "glow-sm": "0 0 0 1px rgb(22 163 106 / 0.5)",
+          "glow-md": "0 0 0 1px rgb(69 229 154 / 0.5), 0 0 12px 0 rgb(22 163 106 / 0.25)",
+          "glow-lg": "0 0 0 1px rgb(69 229 154 / 0.5), 0 0 24px 2px rgb(22 163 106 / 0.3)",
+          focus: "0 0 0 2px rgb(11 13 12), 0 0 0 4px rgb(69 229 154)",
+        },
+      },
+      // Light sections on MARKETING pages only (product app stays dark).
+      light: {
+        color: {
+          canvas: palette.neutral[0],
+          surface: ng.bone,
+          raised: palette.neutral[0],
+          sunken: ng.chalk,
+          fg: ng.carbon,
+          "fg-muted": ng.slate,
+          "fg-subtle": ng.pebble,
+          "fg-disabled": ng.fog,
+          line: ng.haze,
+          "line-strong": ng.haze2,
+          accent: ng.emerald,
+          "accent-hover": ng.signal,
+          "on-accent": palette.neutral[1000],
+          "accent-text": ng.fortress,
+          success: ng.emerald,
+          "on-success": palette.neutral[1000],
+          "success-text": ng.fortress,
+          warning: ng.amber,
+          "on-warning": palette.neutral[1000],
+          "warning-text": palette.amber[800],
+          danger: ng.redDeep,
+          "on-danger": palette.neutral[0],
+          "danger-text": ng.redInk,
+          info: ng.slate,
+          "on-info": palette.neutral[0],
+          "info-text": ng.slate,
+          focus: ng.fortress,
+          scrim: palette.neutral[1000],
+        },
+        shadow: {
+          "elevation-sm": "0 1px 2px 0 rgb(11 13 12 / 0.06)",
+          "elevation-md": "0 4px 12px -2px rgb(11 13 12 / 0.10)",
+          "elevation-lg": "0 12px 32px -4px rgb(11 13 12 / 0.14)",
+          "glow-sm": "0 0 0 1px rgb(22 163 106 / 0.4)",
+          "glow-md": "0 0 0 2px rgb(22 163 106 / 0.3), 0 4px 12px -2px rgb(8 115 75 / 0.15)",
+          "glow-lg": "0 0 0 3px rgb(22 163 106 / 0.3), 0 8px 24px -4px rgb(8 115 75 / 0.2)",
+          focus: "0 0 0 2px rgb(255 255 255), 0 0 0 4px rgb(8 115 75)",
+        },
+      },
+    },
+  },
+};
+
+export const defaultBrand = "nex";
