@@ -12,12 +12,16 @@ on:
         type: boolean
         default: false
 
+# Least privilege: jobs get read-only access unless they ask for more.
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 20
       # Build in an isolated copy so the legacy root workspace (Lerna 4,
@@ -27,6 +31,10 @@ jobs:
       - name: Install
         working-directory: ${{ runner.temp }}/ui
         run: npm install --no-audit --no-fund
+      # Anything that ships to users must have zero known vulnerabilities.
+      - name: Audit runtime dependencies
+        working-directory: ${{ runner.temp }}/ui
+        run: npm audit --omit=dev --audit-level=low
       - name: Typecheck
         working-directory: ${{ runner.temp }}/ui
         run: npm run typecheck
@@ -45,8 +53,8 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 20
           registry-url: https://npm.pkg.github.com
