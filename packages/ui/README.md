@@ -22,7 +22,7 @@ React 18 primitives for every NEX site, styled with Tailwind classes from the `@
      presets: [require("@thenexlabs/tokens/tailwind")],
      content: [
        "./src/**/*.{ts,tsx}",
-       "./node_modules/@thenexlabs/ui/dist/**/*.{js,cjs}",
+       "./node_modules/@thenexlabs/ui/dist/**/*.{js,mjs}",
      ],
    };
    ```
