@@ -18,7 +18,7 @@ This is the NEX Level Labs design system: design tokens and shared UI packages f
 ```bash
 git clone git@github.com:thenexlabs/nex-toolkit.git
 cd nex-toolkit
-git worktree add ../nex-toolkit-<slug> -b <type>/<slug> origin/master   # one task = one worktree
+git worktree add .worktrees/<slug> -b <type>/<slug> origin/master   # one task = one worktree, inside the repo
 ```
 
 The tokens package has no dependencies. See `packages/tokens/README.md`.
