@@ -1,75 +1,116 @@
-# BRAND.md — NEX Level Labs visual identity
+# BRAND.md — visual identity for NEX sites
 
-This is the visual brand for every NEX site. Exact values live in `packages/tokens/src/tokens.mjs`. If this file and the tokens ever disagree, the **tokens win**; fix this file.
+This design system serves **two brands** that share one set of token *names* but use different values:
 
-## Essence
-
-The look is black and neon green: a terminal at night. It should read as technical, precise and calm, with an edge. Green is a signal, not wallpaper. Most of the screen is black or near-black, and green marks what matters or what can be acted on.
-
-## Colour
-
-### Brand anchors
-
-| Name | Hex | Use |
+| Brand | Used on | How to select it |
 |---|---|---|
-| **Neon** | `#00FF41` | Primary accent: primary buttons, links (in dark mode), focus ring, active states, key data highlights |
-| **Glow** | `#39FF14` | Hover state of neon elements and the colour of glow shadows **only** |
-| **Black** | `#000000` | Dark-mode page canvas |
-| **White** | `#FFFFFF` | Light-mode page canvas |
+| **NEX Level Labs** | Main site and the parent brand | Default (no attribute needed) |
+| **NixGuard** | nixguard.com (product app and marketing) | `<html data-brand="nixguard">` |
 
-### Modes
+Exact values live in `packages/tokens/src/tokens.mjs`. If this file and the tokens ever disagree, the **tokens win**; fix this file.
 
-- **Dark mode is the default and the core brand.** nixguard.com is dark-only.
-- **Light mode** exists for the main site. It uses white backgrounds and keeps neon as a *fill* with black text on it. Green *text* becomes `#007A1F`, because neon on white has a contrast ratio of 1.4:1, which is unreadable.
-- Switch modes with `data-theme="light"` or `data-theme="dark"` on `<html>`. Components never branch on mode; tokens handle it.
+---
 
-### Rules
+## Shared rules (all brands)
 
-1. **No cyan. Ever.** That includes cyan, teal and aqua, and blue-green gradients. The PancakeSwap-era `#1FC7D4` is gone. CI rejects any token with a hue between 165° and 205°.
-2. **Green carries meaning.** It means primary action, selection, focus, success or "live". Don't use it for decoration, large backgrounds or body copy.
-3. **Use one primary action per view.** It gets the neon fill; everything else is secondary (outline) or ghost.
-4. **Status colours:** success is neon green, warning is amber `#FFB800`, and danger is red (`#FF4D4D` in dark mode, `#D92020` in light). "Info" is neutral, not blue and not cyan.
-5. **Neutrals carry a faint green cast** (for example `#111411` rather than `#111111`) so greys sit with the brand. Use the semantic tokens (`canvas`, `surface`, `raised`, `sunken`, `line`) rather than raw greys.
-6. **Contrast:** body text is at least 4.5:1 and UI boundaries and focus are at least 3:1. The token checks enforce this.
+1. **No cyan. Ever.** That includes teal, aqua and blue-green gradients. CI rejects any token with a hue between 165° and 205°.
+2. **Green carries meaning.** It means primary action, protected, verified, passing, or live. Don't use it as decoration in product UI.
+3. **One primary action per view.** It gets the accent fill. Everything else is secondary (outline) or ghost.
+4. **Status colours are reserved for status.** Use amber for warnings and red for danger or failure. "Info" is neutral, never blue or cyan.
+5. **Use roles, not raw colours.** Write `bg-surface`, `text-fg-muted` and `text-accent-text`, never hex values. Every role X has three tokens:
+   - `X` is the fill.
+   - `on-X` is text on that fill.
+   - `X-text` is X-coloured text on the page background.
+6. **Contrast:** text must be at least 4.5:1, and UI boundaries and focus must be at least 3:1. CI checks this per brand and mode.
+7. **Corners are sharp and technical, not bubbly.**
+   - Badge: 4px
+   - Control: 6px
+   - Card: 8px
+   - Modal: 12px
+   - Pill: only for avatars, toggles and status dots
+8. **Spacing is a 4px grid** (Tailwind's default scale).
+9. **Motion is quick and functional.**
+   - Duration is 120ms for hover, 200ms by default and 320ms for modals.
+   - Always honour `prefers-reduced-motion`.
+10. **Mono type is for data.** Use it for IDs, hashes, IPs, timestamps, CLI and code, and use tabular numerals (`.nex-data`) in number columns.
 
-## Glow
+---
 
-Glow is the signature effect, so use it sparingly.
+## NEX Level Labs
 
-- `shadow-glow-sm` goes on hover or focus of primary controls.
-- `shadow-glow-md` goes on the active or selected state, or a featured card on hover.
-- `shadow-glow-lg` is for a single hero moment per page at most.
-- Never use glow on text blocks, tables or more than one element at rest in the same viewport.
-- In light mode, glow automatically becomes a soft green halo.
-- Respect `prefers-reduced-motion`: don't pulse or animate glow when it's set.
+*The look: black and neon green, like a terminal at night. Technical, precise and calm, with an edge.*
 
-## Typography
+| Role | Value |
+|---|---|
+| Accent (fill, focus, dark-mode accent text) | **Neon `#00FF41`** |
+| Hover and glow | **Glow `#39FF14`**, only for hover and glow |
+| Dark canvas | Black `#000000`, with green-tinted neutrals (`#0A0C0A`, `#111411`) |
+| Light canvas (main site) | White `#FFFFFF`. Neon stays a *fill* with black text. Green **text** becomes `#007A1F`, because neon on white is 1.4:1. |
+| Danger / warning | `#FF4D4D` in dark mode, `#D92020` in light; amber `#FFB800` |
+| UI font | **Public Sans** (400, 500, 600, 700) |
+| Data font | **JetBrains Mono** (400, 500) |
+
+**Glow** is the NEX signature effect, so use it sparingly:
+- `shadow-glow-sm` is for hover or focus on primary controls.
+- `shadow-glow-md` is for active or selected states.
+- `shadow-glow-lg` is for at most one hero moment per page.
+
+Never put glow on text blocks or tables, and never on more than one element at rest per viewport.
+
+**Don't:** put neon text on white, use full-bleed neon backgrounds, use Kanit, or use any leftover PancakeSwap purple.
+
+---
+
+## NixGuard
+
+*Security, compliance and trust. "A safer tomorrow builds brighter possibilities." The look is calm and confident: deep green-black with emerald, not neon.*
+
+Values come from the NixGuard brand board (2026-09).
+
+### Palette
+
+| Name | Hex | Role |
+|---|---|---|
+| **Nix Emerald** | `#16A36A` | Accent fill: primary buttons, progress bars, status icons. Text on it is **black** (6.5:1); white on emerald is only 3.2:1. |
+| **Fortress Green** | `#08734B` | Accent *text* on light sections and focus ring on light (5.9:1 on white) |
+| **Signal Green** | `#45E59A` | Hover state, accent text on dark, and "Protected" or "Passing" emphasis (12:1 on Carbon) |
+| **Carbon** | `#0B0D0C` | Dark canvas |
+| **Graphite** | `#141816` | Dark surface (cards, panels) |
+| **Iron** | `#27302B` | Dark borders and dividers |
+| **Bone** | `#F5F7F5` | Primary text on dark; light-section surface |
+| **Mist** | `#A5AEA9` | Muted text on dark (7.9:1 on Graphite) |
+| **Amber** | `#F2B84B` | Warning |
+| **Signal Red** | `#E05252` | Danger on dark. On light it deepens to `#C43B3B` (fill) and `#B03030` (text), because `#E05252` on white is 3.8:1. |
+
+### Type
 
 | Family | Use |
 |---|---|
-| **Public Sans** (400, 500, 600, 700) | All UI text: headings, body, labels, buttons |
-| **JetBrains Mono** (400, 500) | Technical and data text: code, hashes, IPs, IDs, timestamps, CLI snippets, numeric table columns, small "terminal" labels |
+| **Geist** | Headlines and UI in the product app; body text everywhere |
+| **Geist Mono** | Data and commands: logs, IDs, control IDs, CLI, numbers in tables |
+| **Condensed serif** (`font-display`) | **Marketing headlines only**, as in the landing page hero ("Get compliant faster. Stay protected after."). The face is a placeholder, *Instrument Serif*, until the final font is confirmed. Never use it in the product app, in body copy or below `text-3xl`. |
 
-- Load both with `next/font` and set the variables `--nex-font-public-sans` and `--nex-font-jetbrains-mono`. See the tokens README.
-- Use tabular numerals (`.nex-data` or `tabular-nums`) for any column of numbers.
-- Uppercase mono labels use `tracking-caps` (0.08em) and `text-xs`. Use them sparingly, as eyebrow labels and table headers.
-- The type scale matches Tailwind's (`text-xs` through `text-5xl`). Headings use weight 600 or 700, and body text uses 400.
+### Brand principles (from the board)
 
-## Shape, space and depth
+1. Green means protected, verified and passing.
+2. Black anchors trust and authority.
+3. Use Bone for clarity and balance.
+4. Reserve accent colours for status and alerts.
 
-- **Corners are sharp and technical, not bubbly.** Badge radius is 4px, controls (buttons, inputs) are 6px, cards are 8px and modals are 12px. Use full rounding (pill) only for avatars, toggles and status dots.
-- **Spacing is a 4px grid,** which is Tailwind's default scale.
-- **Depth in dark mode comes from surface steps,** going from `canvas` to `surface` to `raised`, plus 1px `line` borders. Drop shadows are minimal; glow replaces them for emphasis.
+### Modes
 
-## Motion
+- **The product app is dark-only.**
+- **Marketing pages** are dark-first and may use **light sections** (`<section data-theme="light">`) for product screenshots, pricing comparisons and long-form copy. Each light band is self-contained, and the page header and footer stay dark.
+- **Full-bleed emerald bands** are allowed on marketing pages only, for partner logo strips and the closing CTA, at most two per page. Text on them is black or Carbon.
 
-Motion is quick and functional. Use 120ms for hovers, 200ms for most transitions and 320ms for modals. Use the standard easing curve. Never animate for decoration, and honour reduced motion.
+### Glow
 
-## Don't
+NixGuard has **no neon bloom**. Its `glow-*` tokens are quiet emerald rings, used for focus, the selected nav item and the hover state of interactive cards.
 
-- Use cyan, teal or purple, or gradients from the PancakeSwap era.
-- Put neon text on a white background.
-- Make full-bleed neon backgrounds.
-- Use Kanit. It's a legacy-kit font and must be replaced.
-- Hard-code hex values in components.
-- Use more than one glowing element at rest.
+### Don't
+
+- Use neon `#00FF41` or `#39FF14`, which belong to NEX Level Labs.
+- Put white text on Emerald.
+- Use the display serif in the app UI.
+- Use purple or violet illustration backgrounds; see `knowledge/06-nixguard-landing-page.md`, which lists this as an open question.
+- Use cyan.
