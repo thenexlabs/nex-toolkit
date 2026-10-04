@@ -9,14 +9,19 @@
     "directory": "packages/ui"
   },
   "sideEffects": false,
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
     },
     "./package.json": "./package.json"
   },
@@ -25,14 +30,16 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && node scripts/verify-exports.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "prepublishOnly": "npm run typecheck && npm test && npm run build"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-toast": "^1.2.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "tailwind-merge": "^2.5.5"
@@ -41,7 +48,7 @@
     "@thenexlabs/tokens": ">=0.1.0",
     "react": ">=18",
     "react-dom": ">=18",
-    "tailwindcss": ">=3.3"
+    "tailwindcss": ">=3.4"
   },
   "peerDependenciesMeta": {
     "@thenexlabs/tokens": {
