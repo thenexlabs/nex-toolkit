@@ -47,7 +47,8 @@ const allColours = () => {
     }
   };
   walk(T.palette, "palette");
-  for (const mode of Object.keys(T.modes)) walk(T.modes[mode].color, `${mode}.color`);
+  for (const [b, brand] of Object.entries(T.brands))
+    for (const mode of Object.keys(brand.modes)) walk(brand.modes[mode].color, `${b}.${mode}.color`);
   return out;
 };
 
@@ -61,12 +62,14 @@ test("no cyan (brand rule)", () => {
     assert.ok(!(h >= 165 && h <= 205 && s > 0.15), `${name} ${v} is cyan (hue ${h.toFixed(0)}°)`);
   }
   // Shadows embed rgb() literals — check those too.
-  for (const mode of Object.keys(T.modes)) {
-    for (const [k, v] of Object.entries(T.modes[mode].shadow)) {
-      for (const m of v.matchAll(/rgb\((\d+) (\d+) (\d+)/g)) {
-        const hex = "#" + m.slice(1, 4).map((n) => Number(n).toString(16).padStart(2, "0")).join("");
-        const { h, s } = hsl(hex);
-        assert.ok(!(h >= 165 && h <= 205 && s > 0.15), `${mode}.shadow.${k} contains cyan ${hex}`);
+  for (const [b, brand] of Object.entries(T.brands)) {
+    for (const mode of Object.keys(brand.modes)) {
+      for (const [k, v] of Object.entries(brand.modes[mode].shadow)) {
+        for (const m of v.matchAll(/rgb\((\d+) (\d+) (\d+)/g)) {
+          const hex = "#" + m.slice(1, 4).map((n) => Number(n).toString(16).padStart(2, "0")).join("");
+          const { h, s } = hsl(hex);
+          assert.ok(!(h >= 165 && h <= 205 && s > 0.15), `${b}.${mode}.shadow.${k} contains cyan ${hex}`);
+        }
       }
     }
   }
@@ -79,23 +82,47 @@ test("brand anchors are untouched", () => {
   assert.equal(T.modes.dark.color["accent-hover"], "#39FF14");
   assert.equal(T.modes.dark.color.canvas, "#000000");
   assert.equal(T.modes.light.color.canvas, "#FFFFFF");
+  assert.equal(T.brands.nex.modes, T.modes, "nex brand must be the default modes");
+  assert.equal(T.defaultBrand, "nex");
 });
 
-test("dark and light define the same tokens", () => {
-  assert.deepEqual(Object.keys(T.modes.light.color).sort(), Object.keys(T.modes.dark.color).sort());
-  assert.deepEqual(Object.keys(T.modes.light.shadow).sort(), Object.keys(T.modes.dark.shadow).sort());
+test("NixGuard anchors match the brand board", () => {
+  const ng = T.palette.nixguard;
+  assert.deepEqual(
+    [ng.emerald, ng.fortress, ng.signal, ng.carbon, ng.graphite, ng.iron, ng.bone, ng.mist, ng.amber, ng.red],
+    ["#16A36A", "#08734B", "#45E59A", "#0B0D0C", "#141816", "#27302B", "#F5F7F5", "#A5AEA9", "#F2B84B", "#E05252"],
+  );
+  const d = T.brands.nixguard.modes.dark.color;
+  assert.equal(d.canvas, ng.carbon);
+  assert.equal(d.surface, ng.graphite);
+  assert.equal(d.accent, ng.emerald);
+  assert.match(T.brands.nixguard.fontFamily.sans[0], /Geist/);
+  assert.match(T.brands.nixguard.fontFamily.mono[0], /Geist Mono/);
 });
 
-for (const mode of Object.keys(T.modes)) {
-  test(`WCAG contrast — ${mode}`, () => {
-    const c = T.modes[mode].color;
-    const failures = [];
-    for (const [fg, bg, min] of T.contrastPairs) {
-      const ratio = contrast(c[fg], c[bg]);
-      if (ratio < min) failures.push(`${fg} on ${bg}: ${ratio.toFixed(2)} < ${min}`);
+test("every brand and mode defines the same tokens", () => {
+  const ref = T.brands[T.defaultBrand].modes.dark;
+  for (const [b, brand] of Object.entries(T.brands)) {
+    for (const [mode, m] of Object.entries(brand.modes)) {
+      assert.deepEqual(Object.keys(m.color).sort(), Object.keys(ref.color).sort(), `${b}.${mode}.color`);
+      assert.deepEqual(Object.keys(m.shadow).sort(), Object.keys(ref.shadow).sort(), `${b}.${mode}.shadow`);
     }
-    assert.deepEqual(failures, []);
-  });
+    assert.deepEqual(Object.keys(brand.fontFamily).sort(), ["display", "mono", "sans"], `${b}.fontFamily`);
+  }
+});
+
+for (const [b, brand] of Object.entries(T.brands)) {
+  for (const mode of Object.keys(brand.modes)) {
+    test(`WCAG contrast — ${b} ${mode}`, () => {
+      const c = brand.modes[mode].color;
+      const failures = [];
+      for (const [fg, bg, min] of T.contrastPairs) {
+        const ratio = contrast(c[fg], c[bg]);
+        if (ratio < min) failures.push(`${fg} on ${bg}: ${ratio.toFixed(2)} < ${min}`);
+      }
+      assert.deepEqual(failures, []);
+    });
+  }
 }
 
 test("generated outputs exist and load", () => {
@@ -108,15 +135,21 @@ test("generated outputs exist and load", () => {
   assert.equal(preset.theme.extend.letterSpacing.caps, "var(--nex-tracking-caps)");
   const ns = preset.createNexPreset({ colorNamespace: "nex", fonts: false });
   assert.ok(ns.theme.extend.colors.nex.accent);
-  assert.equal(ns.theme.extend.fontFamily, undefined);
+  assert.deepEqual(Object.keys(ns.theme.extend.fontFamily), ["display"], "fonts:false keeps only the new 'display' name");
 
   const lib = require("../dist/index.cjs");
   assert.equal(lib.cssVar.color.accent, "rgb(var(--nex-color-accent))");
   assert.equal(lib.withAlpha("accent", 0.2), "rgb(var(--nex-color-accent) / 0.2)");
   assert.equal(lib.toLegacyKitColors("dark").primary, "#00FF41");
+  assert.equal(lib.toLegacyKitColors("dark", "nixguard").primary, "#16A36A");
+  assert.equal(lib.cssVar.font.display, "var(--nex-font-display)");
 
   const css = readFileSync(join(root, "dist/tokens.css"), "utf8");
   assert.match(css, /--nex-color-accent: 0 255 65;/);
   assert.match(css, /\[data-theme="light"\]/);
+  // NixGuard: brand block, nested light sections, carbon canvas
+  assert.match(css, /\[data-brand="nixguard"\] \[data-theme="light"\]/);
+  assert.match(css, /--nex-color-canvas: 11 13 12;/);
+  assert.match(css, /--nex-font-sans: var\(--nex-font-geist/);
   assert.doesNotMatch(css, /\bbody\s*\{/, "tokens.css must not style elements — that belongs in base.css");
 });
