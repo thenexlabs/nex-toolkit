@@ -1,27 +1,26 @@
-# NexDex Toolkit
+# nex-toolkit
 
-This repository is a monorepo manage with [yarn workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) and [Lerna](https://lerna.js.org/).
+This is the NEX Level Labs design system: design tokens and shared UI packages for every NEX site. It's a monorepo managed with Yarn workspaces.
+
+**Start here:** [`AGENTS.md`](AGENTS.md) for working rules, [`BRAND.md`](BRAND.md) for the visual identity, and [`knowledge/`](knowledge/) for decisions and plans.
 
 ## Packages
 
-- [oasis-uikit](https://github.com/oasis-labs/oasis-toolkit/tree/master/packages/oasis-uikit) : React components used to build the Pancake UI
-- [eslint-config-pancake](https://github.com/oasis-labs/oasis-toolkit/tree/master/packages/eslint-config-pancake) : An ESLint config for pancake, with Typescript and Prettier support
-- [pancake-profile-sdk](https://github.com/oasis-labs/oasis-toolkit/tree/master/packages/pancake-profile-sdk) : Handy functions to retrieve data for Pancakeswap Profile system
-- [token-lists](https://github.com/oasis-labs/oasis-toolkit/tree/master/packages/token-lists) : Main PancakeSwap token list and tools to validate it
+| Package | Purpose | Status |
+|---|---|---|
+| `packages/tokens` (`@thenexlabs/tokens`) | Design tokens: CSS variables, Tailwind preset and JS/TS | Active |
+| `packages/ui` (`@thenexlabs/ui`) | React 18 + Tailwind primitives | Planned |
+| `packages/nexdex-uikit` (`@nextechlabs/nexdex-uikit`) | Legacy PancakeSwap-derived styled-components kit | Maintenance only |
+| `packages/token-lists`, `packages/profile-sdk`, `packages/eslint-config-*` | Leftovers from the DEX fork | Not part of the design system |
 
-## How to use
+## Getting started
 
-Clone the repository
-
-```
-git clone git@github.com:nextechlabs/nexdex-toolkit.git
-```
-
-Run yarn at the root of the workspace
-
-```
-cd oasis-toolkit
-yarn
+```bash
+git clone git@github.com:thenexlabs/nex-toolkit.git
+cd nex-toolkit
+git worktree add ../nex-toolkit-<slug> -b <type>/<slug> origin/master   # one task = one worktree
 ```
 
-Then, refer to the readme of each project.
+The tokens package has no dependencies. See `packages/tokens/README.md`.
+
+This repository is a fork of [pancakeswap/pancake-toolkit](https://github.com/pancakeswap/pancake-toolkit).
