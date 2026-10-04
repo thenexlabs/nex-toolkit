@@ -1,0 +1,32 @@
+name: UI
+
+on:
+  pull_request:
+    paths:
+      - "packages/ui/**"
+      - ".github/workflows/ui.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      # Build in an isolated copy so the legacy root workspace (Lerna 4,
+      # Storybook 6, React 17) is never installed for this package.
+      - name: Isolate package
+        run: cp -r packages/ui "$RUNNER_TEMP/ui"
+      - name: Install
+        working-directory: ${{ runner.temp }}/ui
+        run: npm install --no-audit --no-fund
+      - name: Typecheck
+        working-directory: ${{ runner.temp }}/ui
+        run: npm run typecheck
+      - name: Test
+        working-directory: ${{ runner.temp }}/ui
+        run: npm test
+      - name: Build
+        working-directory: ${{ runner.temp }}/ui
+        run: npm run build
