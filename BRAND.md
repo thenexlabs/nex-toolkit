@@ -88,7 +88,7 @@ Values come from the NixGuard brand board (2026-09).
 |---|---|
 | **Geist** | Headlines and UI in the product app; body text everywhere |
 | **Geist Mono** | Data and commands: logs, IDs, control IDs, CLI, numbers in tables |
-| **Condensed serif** (`font-display`) | **Marketing headlines only**, as in the landing page hero ("Get compliant faster. Stay protected after."). The face is a placeholder, *Instrument Serif*, until the final font is confirmed. Never use it in the product app, in body copy or below `text-3xl`. |
+| **Instrument Serif** (`font-display`) | **Marketing headlines only**, as in the landing page hero ("Get compliant faster. Stay protected after."). Never use it in the product app, in body copy or below `text-3xl`. |
 
 ### Brand principles (from the board)
 
@@ -99,7 +99,7 @@ Values come from the NixGuard brand board (2026-09).
 
 ### Modes
 
-- **The product app is dark-only.**
+- **The product app is dark-only**, and so are screenshots and mockups of it on marketing pages.
 - **Marketing pages** are dark-first and may use **light sections** (`<section data-theme="light">`) for product screenshots, pricing comparisons and long-form copy. Each light band is self-contained, and the page header and footer stay dark.
 - **Full-bleed emerald bands** are allowed on marketing pages only, for partner logo strips and the closing CTA, at most two per page. Text on them is black or Carbon.
 
@@ -112,5 +112,14 @@ NixGuard has **no neon bloom**. Its `glow-*` tokens are quiet emerald rings, use
 - Use neon `#00FF41` or `#39FF14`, which belong to NEX Level Labs.
 - Put white text on Emerald.
 - Use the display serif in the app UI.
-- Use purple or violet illustration backgrounds; see `knowledge/06-nixguard-landing-page.md`, which lists this as an open question.
+- Use purple, violet or any off-palette colour in illustrations. Illustration grounds come from the palette, with Amber as the only secondary hue.
+- Use pill-shaped buttons. All buttons, marketing CTAs included, use `rounded-control`.
 - Use cyan.
+
+### Mascots
+
+The bulldog, turtle and rabbit are official brand assets, kept in `brand-assets/nixguard/mascots/`.
+- Marketing only, never in the product app UI.
+- Recolour only within the palette.
+- Never stretch them or put them on busy backgrounds.
+- Minimum size is 64px.
