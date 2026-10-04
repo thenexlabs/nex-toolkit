@@ -23,6 +23,17 @@ Read this file first. After that, read `BRAND.md` and the relevant file in `know
 7. **No cyan.** Not as a colour, a gradient stop or a glow. The token checks fail if cyan appears. See `BRAND.md`.
 8. **Never edit generated files** (`packages/*/dist/**`). Edit the source and rebuild.
 
+## Security rules (non-negotiable)
+
+NEX Level Labs is a cybersecurity company. A vulnerability or careless commit here is a reputational incident, not just a bug.
+
+- **Secrets:** never read, print, commit or paste secrets (`.env*`, tokens, keys). Use CI secrets only.
+- **Dependencies:** add as few as possible. Each new runtime dependency needs a reason in the PR, an active maintainer, and a clean `npm audit`. Pin with `^` in packages, and commit lockfiles in apps.
+- **Code:** no `eval`, no `dangerouslySetInnerHTML`, and no user input in class names, styles or URLs without validation. Components never fetch, log or store data.
+- **CI:** pin actions to a full commit SHA, set `permissions: contents: read` by default, and never use `pull_request_target`. Publishing happens only from `master` through CI.
+- **Public repo:** nothing confidential goes here: roadmap, investors, partners, customers, pricing or internal hostnames. When in doubt, it belongs in the private handbook.
+- **Report** any suspected vulnerability privately (see `SECURITY.md`), never in a public issue.
+
 ## Repo map
 
 | Path | What | Status |
