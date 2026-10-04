@@ -23,6 +23,13 @@ Read this file first. After that, read `BRAND.md` and the relevant file in `know
 7. **No cyan.** Not as a colour, a gradient stop or a glow. The token checks fail if cyan appears. See `BRAND.md`.
 8. **Never edit generated files** (`packages/*/dist/**`). Edit the source and rebuild.
 
+## Verify, never guess (non-negotiable)
+
+- State something as fact only after you've checked it: read the file, run the command, call the API, open the page.
+- If you can't verify something, say so plainly ("unverified: …") and say how to verify it. Don't fill gaps with plausible assumptions.
+- Don't tell a person or another agent that something exists (a file, branch, page, package or setting) until you've confirmed it.
+- Every "done" report says how it was checked: test output, CI run, screenshot or API response.
+
 ## Security rules (non-negotiable)
 
 NEX Level Labs is a cybersecurity company. A vulnerability or careless commit here is a reputational incident, not just a bug.
