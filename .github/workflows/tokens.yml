@@ -1,0 +1,46 @@
+name: Tokens
+
+on:
+  pull_request:
+    paths:
+      - "packages/tokens/**"
+      - ".github/workflows/tokens.yml"
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish @thenexlabs/tokens to GitHub Packages"
+        type: boolean
+        default: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      # Zero dependencies: no install needed.
+      - name: Build + check (hex, no-cyan, WCAG contrast, preset loads)
+        working-directory: packages/tokens
+        run: node scripts/build.mjs && node --test scripts/check.mjs
+
+  publish:
+    if: github.event_name == 'workflow_dispatch' && inputs.publish && github.ref == 'refs/heads/master'
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://npm.pkg.github.com
+          scope: "@thenexlabs"
+      - name: Publish
+        working-directory: packages/tokens
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
