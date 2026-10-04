@@ -39,7 +39,7 @@
     "build": "node scripts/build.mjs",
     "test": "node scripts/build.mjs && node --test scripts/check.mjs",
     "prepare": "node scripts/build.mjs",
-    "prepublishOnly": "yarn test"
+    "prepublishOnly": "npm test"
   },
   "peerDependencies": {
     "tailwindcss": ">=3.3"

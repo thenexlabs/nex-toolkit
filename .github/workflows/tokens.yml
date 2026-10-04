@@ -39,8 +39,11 @@ jobs:
           node-version: 20
           registry-url: https://npm.pkg.github.com
           scope: "@thenexlabs"
+      # Publish from an isolated copy so npm never sees the legacy root workspace.
+      - name: Isolate package
+        run: cp -r packages/tokens "$RUNNER_TEMP/tokens"
       - name: Publish
-        working-directory: packages/tokens
+        working-directory: ${{ runner.temp }}/tokens
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
