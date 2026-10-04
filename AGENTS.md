@@ -1,6 +1,6 @@
 # AGENTS.md — nex-toolkit
 
-Rules for every contributor, human or AI agent, working in this repo. This repo is the **NEX design system**: design tokens plus shared UI packages consumed by every NEX Level Labs site (main site, nixguard.com, and others).
+Rules for every contributor, human or AI agent, working in this repo. This repo is the **NEX design system**: design tokens plus shared UI packages consumed by every NEX Level Labs site (main site, nixguard.com, and others). It serves two brands from the same token names: **NEX Level Labs** (default, neon on black) and **NixGuard** (`data-brand="nixguard"`, emerald on Carbon). See `BRAND.md`.
 
 Read this file first. After that, read `BRAND.md` and the relevant file in `knowledge/` before you change anything.
 
@@ -18,9 +18,10 @@ Read this file first. After that, read `BRAND.md` and the relevant file in `know
 2. **Never push to `master`** (this repo's default branch). Don't force-push shared branches. Every change lands through a PR.
 3. **Small PRs.** Each PR does one thing: one component, one token change, or one doc. Aim for less than about 400 changed lines, excluding generated or lock files. If a task grows, split it into stacked PRs.
 4. **Never read `.env` files.** That includes `.env`, `.env.*`, `*.env` and any other secrets file. Don't `cat`, `grep`, open or summarise them, and don't add them to commits or prompts. If you need a value, ask a human. Only `.env.example`, which holds no real values, may be read or edited.
-5. **Never hard-code design values.** No raw hex, rgb, px font sizes, radii or shadows in component code. Use tokens: Tailwind classes from the NEX preset, or `cssVar`/`--nex-*` variables. If a token you need is missing, add it to `packages/tokens/src/tokens.mjs` in its own PR.
-6. **No cyan.** Not as a colour, a gradient stop or a glow. The token checks fail if cyan appears. See `BRAND.md`.
-7. **Never edit generated files** (`packages/*/dist/**`). Edit the source and rebuild.
+5. **Never branch on brand in components.** No `if (brand === "nixguard")`. If two brands need different values, the difference belongs in tokens.
+6. **Never hard-code design values.** No raw hex, rgb, px font sizes, radii or shadows in component code. Use tokens: Tailwind classes from the NEX preset, or `cssVar`/`--nex-*` variables. If a token you need is missing, add it to `packages/tokens/src/tokens.mjs` in its own PR.
+7. **No cyan.** Not as a colour, a gradient stop or a glow. The token checks fail if cyan appears. See `BRAND.md`.
+8. **Never edit generated files** (`packages/*/dist/**`). Edit the source and rebuild.
 
 ## Repo map
 
@@ -54,7 +55,8 @@ The legacy kit uses the root `yarn` workspace with Lerna 4, Storybook 6 and Node
 
 - Use existing primitives before writing new markup. Check `@thenexlabs/ui`, then the legacy kit, and only then hand-roll. If you hand-roll, open an issue to add the primitive here.
 - Colour roles follow the pattern `X` / `on-X` / `X-text`. Use `text-accent-text` for green text and `bg-accent text-on-accent` for green fills. Never put neon green text on a white background.
-- Use JetBrains Mono (`font-mono`, `.nex-data`) for technical and data text: IDs, hashes, IPs, code, numbers in tables. Use Public Sans for everything else.
+- Use `font-mono` and `.nex-data` for technical and data text: IDs, hashes, IPs, code, numbers in tables. Use `font-sans` for everything else. The brand decides the actual face (JetBrains Mono or Public Sans for NEX, Geist Mono or Geist for NixGuard).
+- `font-display` is for marketing headlines only, never in app UI.
 - Glow is for interactive emphasis (hover, focus, the active state of the primary action). It's not decoration, and it never goes on body text.
 - Every interactive element needs a visible `:focus-visible` state (`shadow-focus`), keyboard support and an accessible name.
 

@@ -1,6 +1,6 @@
 # 05 — Adoption plan: nixguard.com
 
-*Site: Next.js 14, React 18, Tailwind, styled-components. **Dark-only.** Status: proposed (2026-10-04).*
+*Site: Next.js 14, React 18, Tailwind, styled-components. **Brand: NixGuard** (`data-brand="nixguard"`: Emerald on Carbon, Geist). The product app is dark-only; marketing pages may use light sections. Status: proposed (2026-10-04, updated after the brand board and landing page review).*
 
 **Principle:** every phase ships to production on its own, and nothing requires a big-bang rewrite. Each bullet is about one PR, using the same rules as in `AGENTS.md`: one branch, one worktree, never push to main, never read `.env`.
 
@@ -9,22 +9,22 @@
 1. Add `.npmrc` (registry mapping plus `${NPM_TOKEN}`), and `NPM_TOKEN` in Vercel. Then `yarn add @thenexlabs/tokens`.
 2. In the root layout:
    - Import `@thenexlabs/tokens/tokens.css`.
-   - Set `<html data-theme="dark">`.
-   - Load Public Sans and JetBrains Mono through `next/font` with variables `--nex-font-public-sans` and `--nex-font-jetbrains-mono`.
+   - Set `<html data-brand="nixguard" data-theme="dark">`.
+   - Load Geist and Geist Mono with the `geist` package; the tokens pick up its variables automatically. Load the display serif with `next/font` as `--nex-font-display-serif`. See the tokens README.
 3. In `tailwind.config`, add `presets: [createNexPreset({ fonts: false })]`. If any of these names already exist in the site config, use `colorNamespace: "nex"`: canvas, surface, raised, sunken, fg, line, accent, danger, warning, success, info, focus or scrim.
 4. Make styled-components use the same tokens: `import { cssVar } from "@thenexlabs/tokens"` in any SC file you touch. No ThemeProvider is needed.
 5. Add `AGENTS.md` to nixguard with these rules:
    - UI comes from `@thenexlabs/ui` or tokens.
    - No raw hex.
-   - No cyan.
+   - No cyan, and no NEX neon on NixGuard.
    - Link to this repo's `BRAND.md`.
 
-**Done when:** the deploy is visually identical, and `getComputedStyle(document.documentElement).getPropertyValue('--nex-color-accent')` returns `0 255 65`.
+**Done when:** the deploy is visually identical, and `getComputedStyle(document.documentElement).getPropertyValue('--nex-color-accent')` returns `22 163 106` (Emerald).
 
 ## Phase 1: Foundations (1–2 days)
 
 1. **Inventory.** Run a script that counts raw hex values, Tailwind arbitrary colours (`bg-[#…]`), cyan usages (`cyan-`, `teal-`, `#0ff`, `#00ffff`, `#1FC7D4`) and hand-rolled `<button>`/`<input>`/modal markup per file. Commit the report to `nixguard/knowledge/ui-inventory.md`. It decides the order of later PRs.
-2. **Fonts on.** Switch the preset to the default (`fonts: true`) and import `@thenexlabs/tokens/base.css`. This is one visible PR; screenshot the top 5 pages.
+2. **Fonts on.** Switch the preset to the default (`fonts: true`) so `font-sans` becomes Geist, and import `@thenexlabs/tokens/base.css`. This is one visible PR; screenshot the top 5 pages.
 3. **Colour codemod, by area.** Replace raw neutrals and greens with semantic classes, and remove all cyan. Do one route group per PR.
 4. **Guardrail.** Add a CI step, ESLint or a grep, that fails on new raw hex or cyan in changed lines. Start it in warn mode.
 
@@ -45,6 +45,10 @@ For each primitive there are two PRs: **(a)** build it in `nex-toolkit/packages/
 | 7 | **Table** | Most complex. It benefits from Card and Badge existing first. | Numeric columns use `nex-data`. Keep sort logic in the site at first and only swap markup and styles. |
 
 **Done when:** these seven account for more than 90% of matching usages in the inventory, and no new hand-rolled versions are being merged.
+
+## Phase 2b: Landing page (in parallel, once Button, Input and Card ship)
+
+Build the new landing page on tokens from day one rather than migrating it later. Its section map and the marketing patterns it needs are in `06-nixguard-landing-page.md`. Resolve the open questions there first, especially the canvas colour, the purple card and the display font.
 
 ## Phase 3: Patterns and cleanup (ongoing)
 

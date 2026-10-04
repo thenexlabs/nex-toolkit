@@ -9,6 +9,7 @@ This folder holds decisions, audits and plans for the NEX design system. Code sh
 | [03-tokens.md](03-tokens.md) | Token structure, naming and CI guardrails | Implemented |
 | [04-ui-direction.md](04-ui-direction.md) | Stack and API for `@thenexlabs/ui`, plus the first primitives | Proposed |
 | [05-nixguard-adoption.md](05-nixguard-adoption.md) | Phased rollout to nixguard.com | Proposed |
+| [06-nixguard-landing-page.md](06-nixguard-landing-page.md) | Landing page mapped to tokens; open brand questions | Notes |
 
 ## Conventions
 
