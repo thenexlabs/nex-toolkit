@@ -7,7 +7,8 @@ React 18 primitives for every NEX site, styled with Tailwind classes from the `@
 | Component | Status |
 |---|---|
 | `Button` | ✅ v0.1 |
-| Badge, Input, Card, Modal, Toast, Table | Planned, in that order. See `knowledge/04-ui-direction.md`. |
+| `Badge` | ✅ v0.1 |
+| Input, Card, Modal, Toast, Table | Planned, in that order. See `knowledge/04-ui-direction.md`. |
 
 ## Setup in a site
 
@@ -53,6 +54,28 @@ All native `<button>` props pass through. `type` defaults to `"button"`, not `"s
 **Rules:** use one `primary` per view. Don't override colours with `className`. If you need a new look, it's a new variant, added here in its own PR.
 
 `buttonVariants({ variant, size })` returns the class string, for the rare element that can't be a Button. `cn()` merges classes and understands NEX class names. For example, `cn("rounded-control", "rounded-card")` gives `"rounded-card"`.
+
+## Badge
+
+```tsx
+import { Badge } from "@thenexlabs/ui";
+
+<Badge>Draft</Badge>                                 {/* neutral */}
+<Badge tone="success" dot>Passing</Badge>
+<Badge tone="warning">Evidence due</Badge>
+<Badge tone="danger" dot>Failing</Badge>
+<Badge tone="info" mono>CC6.1</Badge>
+```
+
+| Prop | Values | Default |
+|---|---|---|
+| `tone` | `neutral` `accent` `success` `warning` `danger` `info` | `neutral` |
+| `dot` | Leading status dot in the tone colour (decorative, hidden from screen readers) | `false` |
+| `mono` | Monospace with tabular figures, for codes and IDs (CVE IDs, control IDs, versions) | `false` |
+
+Badges aren't interactive. For something clickable, use a Button.
+
+**Rules:** status tones (`success`, `warning`, `danger`) are for status only. The label must make sense without colour, so write "Failing", not just a red dot.
 
 ## Develop
 
