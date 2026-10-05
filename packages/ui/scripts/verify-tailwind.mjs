@@ -7,7 +7,8 @@
  * 2. Find every class in `dist` that uses a NEX token name (derived from the
  *    preset itself, so new components are covered automatically).
  * 3. Fail if any of those classes is missing from the CSS, or its rule does not
- *    resolve through a --nex-* variable.
+ *    contain the value the preset maps it to (its --nex-* variable, or the exact
+ *    value for tokens the preset inlines: z-index, duration, easing).
  * 4. Compile again WITHOUT the preset and require `bg-accent` to be absent,
  *    proving this check can fail.
  *
@@ -111,10 +112,23 @@ for (const lit of source.matchAll(/(["'`])((?:(?!\1)[^\\\n]|\\.)*)\1/g)) {
 if (candidates.size < 30) fail(`only ${candidates.size} NEX classes found in dist; extractor is broken`);
 
 // --- compile with the preset and check every class -----------------------------
+// What each class's rule must contain: the --nex-* variable the preset maps it to,
+// or, for tokens the preset inlines (z-index, duration, easing), the exact value.
+const scaleFor = (prefix) =>
+  ({ shadow: ext.boxShadow, rounded: ext.borderRadius, z: ext.zIndex, duration: ext.transitionDuration,
+     ease: ext.transitionTimingFunction, tracking: ext.letterSpacing })[prefix] ?? ext.colors;
+function expectedIn(cls) {
+  const utility = /** @type {string} */ (cls.split(/:(?![^[]*\])/).pop()).replace(/\/\d+$/, "");
+  const dash = utility.indexOf("-");
+  const prefix = utility.slice(0, dash);
+  const value = String(scaleFor(prefix)[utility.slice(dash + 1)]);
+  return value.match(/var\(--nex-[a-z0-9-]+\)/)?.[0] ?? value;
+}
+
 const css = compile(true);
 const escape = (cls) => cls.replace(/[^a-zA-Z0-9_-]/g, (c) => `\\${c}`);
 const missing = [];
-const unbacked = [];
+const wrongValue = [];
 for (const cls of [...candidates].sort()) {
   const sel = `.${escape(cls)}`;
   const at = css.indexOf(sel);
@@ -123,15 +137,16 @@ for (const cls of [...candidates].sort()) {
     continue;
   }
   const body = css.slice(css.indexOf("{", at), css.indexOf("}", at));
-  if (!body.includes("var(--nex-")) unbacked.push(cls);
+  const want = expectedIn(cls);
+  if (!body.includes(want)) wrongValue.push(`${cls} (expected ${want})`);
 }
 if (missing.length) fail(`classes used by components but NOT generated:\n  ${missing.join("\n  ")}`);
-if (unbacked.length) fail(`classes generated without a --nex-* variable:\n  ${unbacked.join("\n  ")}`);
+if (wrongValue.length) fail(`classes generated with the wrong value:\n  ${wrongValue.join("\n  ")}`);
 
 // --- negative control: without the preset, NEX classes must disappear ----------
 const bare = compile(false);
 if (bare.includes(".bg-accent")) fail("bg-accent was generated WITHOUT the preset; this check cannot detect a missing preset");
 
 console.log(
-  `verify-tailwind OK: tailwindcss ${twPkg.version}, ${candidates.size} NEX classes from ${files.length} dist files all generated and token-backed; negative control passed`,
+  `verify-tailwind OK: tailwindcss ${twPkg.version}, ${candidates.size} NEX classes from ${files.length} dist files all generated with their token values; negative control passed`,
 );
