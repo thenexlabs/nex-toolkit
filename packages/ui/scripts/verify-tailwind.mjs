@@ -28,6 +28,11 @@ const distDir = join(root, "dist");
 
 const fail = (msg) => {
   console.error(`verify-tailwind: ${msg}`);
+  // Surface the reason as a GitHub annotation so it is visible without raw logs.
+  if (process.env.GITHUB_ACTIONS) {
+    const enc = String(msg).slice(0, 3500).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
+    console.log(`::error title=verify-tailwind::${enc}`);
+  }
   process.exit(1);
 };
 
@@ -57,7 +62,12 @@ function compile(withPreset) {
 `,
   );
   const out = join(work, withPreset ? "with.css" : "without.css");
-  execFileSync(process.execPath, [twBin, "-c", config, "-i", input, "-o", out], { stdio: "pipe" });
+  try {
+    execFileSync(process.execPath, [twBin, "-c", config, "-i", input, "-o", out], { stdio: "pipe" });
+  } catch (err) {
+    const e = /** @type {{ stderr?: Buffer, message: string }} */ (err);
+    fail(`tailwindcss failed (${withPreset ? "with" : "without"} preset):\n${e.stderr?.toString() || e.message}`);
+  }
   return readFileSync(out, "utf8");
 }
 
