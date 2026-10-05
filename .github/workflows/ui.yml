@@ -27,7 +27,9 @@ jobs:
       # Build in an isolated copy so the legacy root workspace (Lerna 4,
       # Storybook 6, React 17) is never installed for this package.
       - name: Isolate package
-        run: cp -r packages/ui "$RUNNER_TEMP/ui"
+        run: |
+          cp -r packages/ui "$RUNNER_TEMP/ui"
+          cp -r packages/tokens "$RUNNER_TEMP/tokens"
       - name: Install
         working-directory: ${{ runner.temp }}/ui
         run: npm install --no-audit --no-fund
@@ -44,6 +46,15 @@ jobs:
       - name: Build
         working-directory: ${{ runner.temp }}/ui
         run: npm run build
+      # End-to-end: compile ui dist with the real tokens preset under real Tailwind.
+      - name: Build tokens (zero dependencies)
+        working-directory: ${{ runner.temp }}/tokens
+        run: node scripts/build.mjs
+      - name: Verify Tailwind integration
+        working-directory: ${{ runner.temp }}/ui
+        env:
+          NEX_TOKENS_DIR: ${{ runner.temp }}/tokens
+        run: npm run verify:tailwind
 
   publish:
     if: github.event_name == 'workflow_dispatch' && inputs.publish && github.ref == 'refs/heads/master'
