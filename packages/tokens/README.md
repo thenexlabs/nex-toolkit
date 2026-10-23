@@ -59,7 +59,7 @@ const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--nex-font-jetbrain
 // NixGuard (yarn add geist)
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import { Instrument_Serif } from "next/font/google"; // placeholder display face, see BRAND.md
+import { Instrument_Serif } from "next/font/google"; // NixGuard display face, marketing headlines only (BRAND.md)
 const display = Instrument_Serif({ subsets: ["latin"], weight: "400", variable: "--nex-font-display-serif", display: "swap" });
 // The tokens pick up GeistSans/GeistMono's own --font-geist-sans / --font-geist-mono automatically.
 // <html data-brand="nixguard" data-theme="dark" className={`${GeistSans.variable} ${GeistMono.variable} ${display.variable}`}>

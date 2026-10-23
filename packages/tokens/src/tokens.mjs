@@ -318,8 +318,8 @@ export const brands = {
     fontFamily: {
       sans: ["var(--nex-font-geist, var(--font-geist-sans, 'Geist'))", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
       mono: ["var(--nex-font-geist-mono, var(--font-geist-mono, 'Geist Mono'))", "ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", "monospace"],
-      // Condensed serif for MARKETING headlines only (landing page). Face is a
-      // placeholder until the final font is confirmed — swap the name here.
+      // Instrument Serif (OFL), the adopted NixGuard display face (knowledge/06,
+      // decision 4). MARKETING headlines only, never in the product app.
       display: ["var(--nex-font-display-serif, 'Instrument Serif')", "ui-serif", "Georgia", "Times New Roman", "serif"],
     },
     modes: {
