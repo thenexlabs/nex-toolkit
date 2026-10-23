@@ -18,16 +18,17 @@ export const inputClasses = [
 ].join(" ");
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
-  { className, invalid, mono, type = "text", ...props },
+  { className, invalid, mono, type = "text", "aria-invalid": ariaInvalid, ...props },
   ref,
 ) {
   return (
     <input
       ref={ref}
       type={type}
-      aria-invalid={invalid || props["aria-invalid"] || undefined}
       className={cn(inputClasses, mono && "font-mono", className)}
       {...props}
+      // After the spread: `invalid` must always win over an explicit aria-invalid.
+      aria-invalid={invalid || ariaInvalid || undefined}
     />
   );
 });
