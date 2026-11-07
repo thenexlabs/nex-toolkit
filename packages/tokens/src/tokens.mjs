@@ -242,7 +242,7 @@ export const modes = {
       frame: p.neutral[950],
       "frame-raised": p.neutral[900],
       "frame-line": p.neutral[850],
-      selected: p.neutral[850],
+      selected: p.neutral[900], // = raised, so a secondary button's hover is unchanged
       key: p.neutral[1000], // the canvas: a secondary button stays an outline
     },
     shadow: {
@@ -293,7 +293,7 @@ export const modes = {
       frame: p.neutral[50],
       "frame-raised": p.neutral[100],
       "frame-line": p.neutral[200],
-      selected: p.neutral[100],
+      selected: p.neutral[0], // = raised
       key: p.neutral[0],
     },
     shadow: {
