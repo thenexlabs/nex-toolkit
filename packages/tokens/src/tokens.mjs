@@ -81,6 +81,14 @@ export const palette = {
     chalk: "#ECEFEC",
     redDeep: "#C43B3B",
     redInk: "#B03030",
+    // The app's frame (top bar, toolbars, dialog headers), from the marketing site's Pine and Sage grounds.
+    pine: "#0F1F17", // Pine — a dark ground with the brand's green in it
+    pineSurface: "#15281E",
+    pineRaised: "#1C3226",
+    pineLine: "#20362A",
+    sage: "#E4EEE7", // Sage — the light counterpart
+    sageSunken: "#D6E4DB",
+    sageLine: "#C7D6CC",
   },
 };
 
@@ -92,6 +100,8 @@ export const typography = {
     mono: ["var(--nex-font-jetbrains-mono, 'JetBrains Mono')", "ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "Liberation Mono", "monospace"],
     // Marketing headlines only. NEX has no separate display face.
     display: ["var(--nex-font-public-sans, 'Public Sans')", "ui-sans-serif", "system-ui", "sans-serif"],
+    // Titles in product UI (dialog, panel and card titles, the wordmark). NEX uses its sans face.
+    title: ["var(--nex-font-public-sans, 'Public Sans')", "ui-sans-serif", "system-ui", "sans-serif"],
   },
   fontWeight: { regular: 400, medium: 500, semibold: 600, bold: 700 },
   // [font-size, line-height] — names match Tailwind's so nothing shifts on adoption.
@@ -184,6 +194,16 @@ export const breakpoints = { sm: "640px", md: "768px", lg: "1024px", xl: "1280px
  *   X        fill / icon colour
  *   on-X     text & icons placed ON an X fill
  *   X-text   X-coloured text placed on canvas/surface (contrast-checked)
+ *
+ * Frame and depth roles (0.2.0). A brand that wants a flat look sets them equal to its other surfaces and its
+ * depth shadows to "0 0 #0000"; NEX does, so its sites look the same.
+ *   frame          the app's frame: top bar, toolbar rows (NixGuard: Pine)
+ *   frame-raised   a dialog's header band, on the frame's colour family
+ *   frame-line     lines on and under the frame
+ *   selected       the ground of a selected segment, tab or section
+ *   key            the fill of a secondary button (a raised key)
+ * Depth shadows: key (secondary button), key-accent (primary and danger), well (inputs, tracks: sunk in),
+ * panel (cards: a light top edge), selected (the selected segment).
  */
 
 const p = palette;
@@ -219,6 +239,11 @@ export const modes = {
       "info-text": p.neutral[200],
       focus: p.green.neon,
       scrim: p.neutral[1000], // use with opacity, e.g. bg-scrim/70
+      frame: p.neutral[950],
+      "frame-raised": p.neutral[900],
+      "frame-line": p.neutral[850],
+      selected: p.neutral[850],
+      key: p.neutral[1000], // the canvas: a secondary button stays an outline
     },
     shadow: {
       "elevation-sm": "0 1px 2px 0 rgb(0 0 0 / 0.6)",
@@ -228,6 +253,11 @@ export const modes = {
       "glow-md": "0 0 4px 0 rgb(57 255 20 / 0.6), 0 0 16px 0 rgb(57 255 20 / 0.35)",
       "glow-lg": "0 0 8px 0 rgb(57 255 20 / 0.6), 0 0 32px 4px rgb(57 255 20 / 0.3)",
       focus: "0 0 0 2px rgb(0 0 0), 0 0 0 4px rgb(0 255 65)",
+      key: "0 0 #0000",
+      "key-accent": "0 0 #0000",
+      well: "0 0 #0000",
+      panel: "0 0 #0000",
+      selected: "0 0 #0000",
     },
   },
   light: {
@@ -260,6 +290,11 @@ export const modes = {
       "info-text": p.neutral[700],
       focus: p.green[900],
       scrim: p.neutral[1000],
+      frame: p.neutral[50],
+      "frame-raised": p.neutral[100],
+      "frame-line": p.neutral[200],
+      selected: p.neutral[100],
+      key: p.neutral[0],
     },
     shadow: {
       "elevation-sm": "0 1px 2px 0 rgb(10 12 10 / 0.06)",
@@ -270,6 +305,11 @@ export const modes = {
       "glow-md": "0 0 0 3px rgb(0 255 65 / 0.35), 0 4px 12px -2px rgb(0 122 31 / 0.20)",
       "glow-lg": "0 0 0 4px rgb(0 255 65 / 0.35), 0 8px 24px -4px rgb(0 122 31 / 0.25)",
       focus: "0 0 0 2px rgb(255 255 255), 0 0 0 4px rgb(0 122 31)",
+      key: "0 0 #0000",
+      "key-accent": "0 0 #0000",
+      well: "0 0 #0000",
+      panel: "0 0 #0000",
+      selected: "0 0 #0000",
     },
   },
 };
@@ -297,6 +337,13 @@ export const contrastPairs = [
   ["on-warning", "warning", 4.5],
   ["on-danger", "danger", 4.5],
   ["on-info", "info", 4.5],
+  ["fg", "frame", 4.5],
+  ["fg-muted", "frame", 4.5],
+  ["fg", "frame-raised", 4.5],
+  ["fg-muted", "frame-raised", 4.5],
+  ["fg", "selected", 4.5],
+  ["fg", "key", 4.5],
+  ["fg-muted", "key", 4.5],
   ["focus", "canvas", 3],
   ["line-strong", "canvas", 1.3],
 ];
@@ -321,6 +368,8 @@ export const brands = {
       // Instrument Serif (OFL), the adopted NixGuard display face (knowledge/06,
       // decision 4). MARKETING headlines only, never in the product app.
       display: ["var(--nex-font-display-serif, 'Instrument Serif')", "ui-serif", "Georgia", "Times New Roman", "serif"],
+      // Bricolage Grotesque (OFL), the marketing site's headline face, for titles in the app and the wordmark.
+      title: ["var(--nex-font-bricolage, 'Bricolage Grotesque')", "var(--nex-font-geist, var(--font-geist-sans, 'Geist'))", "ui-sans-serif", "system-ui", "sans-serif"],
     },
     modes: {
       // Product app + dark marketing sections.
@@ -354,6 +403,11 @@ export const brands = {
           "info-text": ng.mist,
           focus: ng.signal,
           scrim: palette.neutral[1000],
+          frame: ng.pine,
+          "frame-raised": ng.pineSurface,
+          "frame-line": ng.pineLine,
+          selected: ng.pineRaised,
+          key: ng.raised,
         },
         shadow: {
           "elevation-sm": "0 1px 2px 0 rgb(0 0 0 / 0.5)",
@@ -364,6 +418,12 @@ export const brands = {
           "glow-md": "0 0 0 1px rgb(69 229 154 / 0.5), 0 0 12px 0 rgb(22 163 106 / 0.25)",
           "glow-lg": "0 0 0 1px rgb(69 229 154 / 0.5), 0 0 24px 2px rgb(22 163 106 / 0.3)",
           focus: "0 0 0 2px rgb(11 13 12), 0 0 0 4px rgb(69 229 154)",
+          // Depth is drawn, not glowed: a light top edge on what is raised, a dark inner edge on what is sunk.
+          key: "inset 0 1px 0 rgb(255 255 255 / 0.09), 0 1px 2px rgb(0 0 0 / 0.6), 0 2px 6px -2px rgb(0 0 0 / 0.5)",
+          "key-accent": "inset 0 1px 0 rgb(255 255 255 / 0.22), inset 0 -1px 0 rgb(0 0 0 / 0.22), 0 1px 2px rgb(0 0 0 / 0.6), 0 0 0 1px rgb(0 0 0 / 0.45)",
+          well: "inset 0 1px 2px rgb(0 0 0 / 0.7)",
+          panel: "inset 0 1px 0 rgb(255 255 255 / 0.05), 0 8px 20px -8px rgb(0 0 0 / 0.8)",
+          selected: "inset 0 1px 0 rgb(255 255 255 / 0.07), 0 1px 3px rgb(0 0 0 / 0.7)",
         },
       },
       // Light sections on MARKETING pages only (product app stays dark).
@@ -397,6 +457,11 @@ export const brands = {
           "info-text": ng.slate,
           focus: ng.fortress,
           scrim: palette.neutral[1000],
+          frame: ng.sage,
+          "frame-raised": ng.sageSunken,
+          "frame-line": ng.sageLine,
+          selected: ng.sage,
+          key: palette.neutral[0],
         },
         shadow: {
           "elevation-sm": "0 1px 2px 0 rgb(11 13 12 / 0.06)",
@@ -406,6 +471,11 @@ export const brands = {
           "glow-md": "0 0 0 2px rgb(22 163 106 / 0.3), 0 4px 12px -2px rgb(8 115 75 / 0.15)",
           "glow-lg": "0 0 0 3px rgb(22 163 106 / 0.3), 0 8px 24px -4px rgb(8 115 75 / 0.2)",
           focus: "0 0 0 2px rgb(255 255 255), 0 0 0 4px rgb(8 115 75)",
+          key: "0 1px 2px rgb(11 13 12 / 0.08)",
+          "key-accent": "inset 0 1px 0 rgb(255 255 255 / 0.25), 0 1px 2px rgb(11 13 12 / 0.15)",
+          well: "inset 0 1px 2px rgb(11 13 12 / 0.06)",
+          panel: "0 1px 2px rgb(11 13 12 / 0.06)",
+          selected: "0 1px 2px rgb(11 13 12 / 0.1)",
         },
       },
     },

@@ -39,7 +39,7 @@ function modeVars(brand, mode) {
 
 function fontVars(brand) {
   const f = T.brands[brand].fontFamily;
-  return ["sans", "mono", "display"].map((k) => `  --${PREFIX}-font-${k}: ${f[k].join(", ")};`).join("\n");
+  return ["sans", "mono", "display", "title"].map((k) => `  --${PREFIX}-font-${k}: ${f[k].join(", ")};`).join("\n");
 }
 
 function staticVars() {
@@ -176,7 +176,7 @@ const cssVar = {
   shadow: Object.fromEntries(shadowNames.map((k) => [k, `var(--${PREFIX}-shadow-${k})`])),
   radius: Object.fromEntries([...Object.keys(T.radius), ...Object.keys(T.radiusRole)].map((k) => [k, `var(--${PREFIX}-radius-${k})`])),
   space: Object.fromEntries(Object.keys(T.spacing).map((k) => [k, `var(--${PREFIX}-space-${kebab(k)})`])),
-  font: { sans: `var(--${PREFIX}-font-sans)`, mono: `var(--${PREFIX}-font-mono)`, display: `var(--${PREFIX}-font-display)` },
+  font: { sans: `var(--${PREFIX}-font-sans)`, mono: `var(--${PREFIX}-font-mono)`, display: `var(--${PREFIX}-font-display)`, title: `var(--${PREFIX}-font-title)` },
   duration: Object.fromEntries(Object.keys(T.motion.duration).map((k) => [k, `var(--${PREFIX}-duration-${k})`])),
   ease: Object.fromEntries(Object.keys(T.motion.easing).map((k) => [k, `var(--${PREFIX}-ease-${k})`])),
   z: Object.fromEntries(Object.keys(T.zIndex).map((k) => [k, `var(--${PREFIX}-z-${k})`])),
@@ -277,7 +277,7 @@ export type NexShadowToken = ${shadowNames.map((k) => JSON.stringify(k)).join(" 
 export declare const tokens: {
   palette: Record<string, Record<string, string>>;
   typography: {
-    fontFamily: { sans: string[]; mono: string[]; display: string[] };
+    fontFamily: { sans: string[]; mono: string[]; display: string[]; title: string[] };
     fontWeight: Record<string, number>;
     fontSize: Record<string, [string, string]>;
     letterSpacing: Record<string, string>;
@@ -289,14 +289,14 @@ export declare const tokens: {
   zIndex: Record<string, number>;
   breakpoints: Record<string, string>;
   defaultBrand: NexBrand;
-  brands: Record<NexBrand, { label: string; fontFamily: { sans: string[]; mono: string[]; display: string[] }; modes: Record<NexMode, NexModeTokens> }>;
+  brands: Record<NexBrand, { label: string; fontFamily: { sans: string[]; mono: string[]; display: string[]; title: string[] }; modes: Record<NexMode, NexModeTokens> }>;
 };
 export declare const cssVar: {
   color: Record<NexColorToken, string>;
   shadow: Record<NexShadowToken, string>;
   radius: Record<${[...Object.keys(T.radius), ...Object.keys(T.radiusRole)].map((k) => JSON.stringify(k)).join(" | ")}, string>;
   space: Record<string, string>;
-  font: { sans: string; mono: string; display: string };
+  font: { sans: string; mono: string; display: string; title: string };
   duration: Record<${Object.keys(T.motion.duration).map((k) => JSON.stringify(k)).join(" | ")}, string>;
   ease: Record<${Object.keys(T.motion.easing).map((k) => JSON.stringify(k)).join(" | ")}, string>;
   z: Record<${Object.keys(T.zIndex).map((k) => JSON.stringify(k)).join(" | ")}, string>;
@@ -347,8 +347,8 @@ function createNexPreset(options = {}) {
       mono: ["var(--${PREFIX}-font-mono)"],
     };
   }
-  // 'display' is a new name, so it is always safe to add (marketing headlines).
-  extend.fontFamily = { ...(extend.fontFamily || {}), display: ["var(--${PREFIX}-font-display)"] };
+  // 'display' and 'title' are new names, so they are always safe to add (marketing headlines; titles in product UI).
+  extend.fontFamily = { ...(extend.fontFamily || {}), display: ["var(--${PREFIX}-font-display)"], title: ["var(--${PREFIX}-font-title)"] };
   return { theme: { extend } };
 }
 `;

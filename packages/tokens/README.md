@@ -11,7 +11,7 @@ Every brand uses the **same token names** with different values, so one componen
 | Brand | Opt in | Accent | Canvas | Fonts |
 |---|---|---|---|---|
 | **NEX Level Labs** (default) | nothing | Neon `#00FF41`, glow `#39FF14` | Black `#000000` | Public Sans, JetBrains Mono |
-| **NixGuard** | `<html data-brand="nixguard">` | Emerald `#16A36A`, hover Signal `#45E59A` | Carbon `#0B0D0C` | Geist, Geist Mono, plus a condensed serif `font-display` for marketing headlines |
+| **NixGuard** | `<html data-brand="nixguard">` | Emerald `#16A36A`, hover Signal `#45E59A` | Carbon `#0B0D0C` | Geist, Geist Mono, Bricolage Grotesque as `font-title` (titles in the app, the wordmark), plus a serif `font-display` for marketing headlines |
 
 Dark is the default mode. `data-theme="light"` switches to light, either on `<html>` or **on any section**. A light band on a dark landing page is just `<section data-theme="light">`.
 
@@ -61,8 +61,10 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Instrument_Serif } from "next/font/google"; // NixGuard display face, marketing headlines only (BRAND.md)
 const display = Instrument_Serif({ subsets: ["latin"], weight: "400", variable: "--nex-font-display-serif", display: "swap" });
+import { Bricolage_Grotesque } from "next/font/google"; // NixGuard titles in the app and the wordmark (font-title)
+const title = Bricolage_Grotesque({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--nex-font-bricolage", display: "swap" });
 // The tokens pick up GeistSans/GeistMono's own --font-geist-sans / --font-geist-mono automatically.
-// <html data-brand="nixguard" data-theme="dark" className={`${GeistSans.variable} ${GeistMono.variable} ${display.variable}`}>
+// <html data-brand="nixguard" data-theme="dark" className={`${GeistSans.variable} ${GeistMono.variable} ${display.variable} ${title.variable}`}>
 ```
 
 **3. Tailwind preset.**
@@ -84,6 +86,7 @@ The preset only *adds* new names (including `font-display`), so no existing clas
 | Purpose | Classes |
 |---|---|
 | Backgrounds | `bg-canvas` `bg-surface` `bg-raised` `bg-sunken` `bg-scrim/70` |
+| Frame and selection | `bg-frame` (an app's top bar and toolbar rows) `bg-frame-raised` (a dialog's header band) `border-frame-line` `bg-selected` (a selected segment, tab or section) `bg-key` (a secondary button) |
 | Text | `text-fg` `text-fg-muted` `text-fg-subtle` `text-fg-disabled` |
 | Lines | `border-line` `border-line-strong` `divide-line` |
 | Accent | `bg-accent` `hover:bg-accent-hover` `text-on-accent` `text-accent-text` `bg-accent/10` |
@@ -91,8 +94,9 @@ The preset only *adds* new names (including `font-display`), so no existing clas
 | Focus | `ring-focus` or `shadow-focus` |
 | Radius by role | `rounded-badge` `rounded-control` `rounded-card` `rounded-modal` `rounded-pill` |
 | Elevation / glow | `shadow-elevation-sm` `shadow-elevation-md` `shadow-elevation-lg` `shadow-glow-sm` `shadow-glow-md` `shadow-glow-lg` `shadow-focus` |
+| Depth | `shadow-key` (a raised secondary button) `shadow-key-accent` (a raised primary or danger button) `shadow-well` (a sunk input or track) `shadow-panel` (a card's light top edge) `shadow-selected` (a selected segment). NEX sets these to nothing, so its sites stay flat; NixGuard draws them. |
 | Layers | `z-dropdown` `z-sticky` `z-overlay` `z-modal` `z-toast` `z-tooltip` |
-| Type | `font-sans` `font-mono` `font-display` (marketing headlines only) `tracking-caps` `text-6xl` `text-7xl`. Use `.nex-data` (from base.css) for tabular mono numbers. |
+| Type | `font-sans` `font-mono` `font-display` (marketing headlines only) `font-title` (titles in product UI and the wordmark: Bricolage Grotesque for NixGuard, the sans face for NEX) `tracking-caps` `text-6xl` `text-7xl`. Use `.nex-data` (from base.css) for tabular mono numbers. |
 | Motion | `duration-fast` `duration-base` `duration-slow` `ease-standard` `ease-enter` `ease-exit` |
 
 Every colour role X follows the same pattern. `X` is the fill, `on-X` is text placed on that fill, and `X-text` is X-coloured text on the page background. For example, `text-accent-text` is neon `#00FF41` in dark mode but `#007A1F` in light mode, because neon on white is unreadable at 1.4:1.
