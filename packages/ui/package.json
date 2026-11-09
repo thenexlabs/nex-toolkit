@@ -1,6 +1,6 @@
 {
   "name": "@thenexlabs/ui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "NEX Level Labs React primitives, styled with @thenexlabs/tokens via Tailwind",
   "license": "UNLICENSED",
   "repository": {
@@ -45,7 +45,7 @@
     "tailwind-merge": "^2.5.5"
   },
   "peerDependencies": {
-    "@thenexlabs/tokens": ">=0.1.0",
+    "@thenexlabs/tokens": ">=0.2.0",
     "react": ">=18",
     "react-dom": ">=18",
     "tailwindcss": ">=3.4"

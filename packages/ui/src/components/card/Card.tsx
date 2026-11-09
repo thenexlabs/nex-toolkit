@@ -17,7 +17,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
     <Comp
       ref={ref}
       className={cn(
-        "flex flex-col rounded-card border border-line bg-surface text-fg",
+        "flex flex-col rounded-card border border-line bg-surface text-fg shadow-panel",
         interactive &&
           "transition-[border-color,box-shadow] duration-fast ease-standard hover:border-accent/50 hover:shadow-glow-sm focus-visible:outline-none focus-visible:shadow-focus",
         className,
@@ -41,7 +41,7 @@ export const CardFooter = part("CardFooter", "flex items-center gap-2 border-t b
 
 export const CardTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(
   function CardTitle({ className, ...props }, ref) {
-    return <h3 ref={ref} className={cn("text-base font-semibold leading-tight", className)} {...props} />;
+    return <h3 ref={ref} className={cn("font-title text-base font-semibold leading-tight", className)} {...props} />;
   },
 );
 

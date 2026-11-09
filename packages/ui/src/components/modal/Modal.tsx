@@ -71,7 +71,7 @@ export const ModalTitle = React.forwardRef<
   React.ElementRef<typeof Dialog.Title>,
   React.ComponentPropsWithoutRef<typeof Dialog.Title>
 >(function ModalTitle({ className, ...props }, ref) {
-  return <Dialog.Title ref={ref} className={cn("text-lg font-semibold leading-tight", className)} {...props} />;
+  return <Dialog.Title ref={ref} className={cn("font-title text-lg font-semibold leading-tight", className)} {...props} />;
 });
 
 export const ModalDescription = React.forwardRef<

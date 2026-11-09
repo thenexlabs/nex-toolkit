@@ -10,7 +10,7 @@ describe("Button", () => {
     render(<Button>Request a demo</Button>);
     const btn = screen.getByRole("button", { name: "Request a demo" });
     expect(btn.getAttribute("type")).toBe("button");
-    expect(cls(btn)).toEqual(expect.arrayContaining(["bg-accent", "text-on-accent", "rounded-control", "h-9"]));
+    expect(cls(btn)).toEqual(expect.arrayContaining(["bg-accent", "text-on-accent", "rounded-control", "h-9", "shadow-key-accent"]));
   });
 
   it("keeps an explicit type", () => {
@@ -19,7 +19,7 @@ describe("Button", () => {
   });
 
   it.each([
-    ["secondary", "border-line-strong"],
+    ["secondary", "shadow-key"],
     ["ghost", "text-fg-muted"],
     ["danger", "bg-danger"],
   ] as const)("applies the %s variant", (variant, expected) => {

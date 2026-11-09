@@ -13,12 +13,15 @@ import { cn } from "../../lib/cn";
  *  - one `primary` per view
  *  - all buttons use rounded-control (marketing included)
  *  - glow only on hover/focus of primary
+ *  - depth comes from tokens: shadow-key (secondary) and shadow-key-accent (primary, danger) draw a raised key
+ *    where the brand wants one (NixGuard) and nothing where it does not (NEX)
  */
 export const buttonVariants = cva(
   [
     "inline-flex items-center justify-center gap-2 whitespace-nowrap select-none",
     "rounded-control border border-transparent font-medium",
-    "transition-[background-color,border-color,box-shadow,color] duration-fast ease-standard",
+    "transition-[background-color,border-color,box-shadow,color,transform] duration-fast ease-standard",
+    "active:translate-y-px",
     "focus-visible:outline-none focus-visible:shadow-focus",
     "disabled:pointer-events-none disabled:opacity-50",
     "aria-disabled:pointer-events-none aria-disabled:opacity-50",
@@ -27,10 +30,10 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-accent text-on-accent hover:bg-accent-hover hover:shadow-glow-sm",
-        secondary: "border-line-strong bg-transparent text-fg hover:border-accent hover:bg-raised",
+        primary: "bg-accent text-on-accent shadow-key-accent hover:bg-accent-hover hover:shadow-glow-sm",
+        secondary: "border-line-strong bg-key text-fg shadow-key hover:border-accent hover:bg-selected",
         ghost: "bg-transparent text-fg-muted hover:bg-raised hover:text-fg",
-        danger: "bg-danger text-on-danger hover:bg-danger/90",
+        danger: "bg-danger text-on-danger shadow-key-accent hover:bg-danger/90",
       },
       size: {
         sm: "h-8 px-3 text-sm",

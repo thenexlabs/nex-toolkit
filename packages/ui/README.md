@@ -13,6 +13,7 @@ React 18 primitives for every NEX site, styled with Tailwind classes from the `@
 | `Modal` (Radix Dialog: focus trap, Esc, aria) | ✅ |
 | `Toast` (`<Toaster />` + `toast()`) | ✅ |
 | `Table` (`TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell numeric`, `TableCaption`) | ✅ |
+| `SegmentedControl` | ✅ (0.2.0) |
 
 ## Setup in a site
 
@@ -55,6 +56,8 @@ import Link from "next/link";
 
 All native `<button>` props pass through. `type` defaults to `"button"`, not `"submit"`. Icons go in `children`; any `<svg>` is sized to 16px automatically.
 
+**Depth (0.2.0).** `primary` and `danger` carry `shadow-key-accent` and `secondary` is a filled key (`bg-key shadow-key`, hover `bg-selected`). Every button moves down 1px while pressed. The brand's tokens decide what that looks like: NixGuard draws a raised key with a light top edge; NEX sets the shadows to nothing and `key` to its canvas, so its buttons look as before. Needs `@thenexlabs/tokens` 0.2.0.
+
 **Rules:** use one `primary` per view. Don't override colours with `className`. If you need a new look, it's a new variant, added here in its own PR.
 
 `buttonVariants({ variant, size })` returns the class string, for the rare element that can't be a Button. `cn()` merges classes and understands NEX class names. For example, `cn("rounded-control", "rounded-card")` gives `"rounded-card"`.
@@ -81,7 +84,29 @@ Badges aren't interactive. For something clickable, use a Button.
 
 **Rules:** status tones (`success`, `warning`, `danger`) are for status only. The label must make sense without colour, so write "Failing", not just a red dot.
 
+## SegmentedControl
+
+Two to five mutually exclusive choices that change what a view shows. A labelled group of toggle buttons (`aria-pressed`), so each choice is one Tab stop and announces whether it is on. Not for moving between pages (use links) or for form input (use radios).
+
+```tsx
+import { SegmentedControl } from "@thenexlabs/ui";
+
+<SegmentedControl label="View" value={view} onValueChange={setView}
+  options={[{ value: "graph", label: "Graph" }, { value: "table", label: "Table" }]} />
+```
+
+| Prop | Values | Default |
+|---|---|---|
+| `label` | The group's accessible name, for example `"View"` | (required) |
+| `options` | `{ value, label, disabled? }[]` | (required) |
+| `value`, `onValueChange` | The chosen value and its setter | (required) |
+| `size` | `sm` (28px) `md` (32px) `lg` (36px, a comfortable touch target) | `md` |
+
+The track is sunk (`bg-sunken shadow-well`); the chosen segment is `bg-selected shadow-selected` with an accent edge.
+
 ## Input, Card, Modal, Toast, Table
+
+Since 0.2.0: `Input` is sunk (`shadow-well`), `Card` has `shadow-panel`, and `CardTitle` and `ModalTitle` use `font-title` (Bricolage Grotesque for NixGuard, the sans face for NEX).
 
 ```tsx
 import {

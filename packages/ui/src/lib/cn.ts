@@ -14,10 +14,10 @@ const twMerge = extendTailwindMerge({
       rounded: [{ rounded: ["badge", "control", "card", "modal", "pill"] }],
       shadow: [
         {
-          shadow: ["elevation-sm", "elevation-md", "elevation-lg", "glow-sm", "glow-md", "glow-lg", "focus"],
+          shadow: ["elevation-sm", "elevation-md", "elevation-lg", "glow-sm", "glow-md", "glow-lg", "focus", "key", "key-accent", "well", "panel", "selected"],
         },
       ],
-      "font-family": [{ font: ["display"] }],
+      "font-family": [{ font: ["display", "title"] }],
       tracking: [{ tracking: ["caps"] }],
       z: [{ z: ["dropdown", "sticky", "overlay", "modal", "toast", "tooltip"] }],
       duration: [{ duration: ["fast", "base", "slow"] }],

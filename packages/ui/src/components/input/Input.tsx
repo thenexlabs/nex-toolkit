@@ -9,7 +9,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 }
 
 export const inputClasses = [
-  "h-9 w-full rounded-control border border-line-strong bg-sunken px-3 text-sm text-fg",
+  "h-9 w-full rounded-control border border-line-strong bg-sunken px-3 text-sm text-fg shadow-well",
   "placeholder:text-fg-subtle",
   "transition-[border-color,box-shadow] duration-fast ease-standard",
   "focus-visible:outline-none focus-visible:border-accent focus-visible:shadow-focus",

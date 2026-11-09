@@ -5,4 +5,5 @@ export * from "./components/card";
 export * from "./components/modal";
 export * from "./components/toast";
 export * from "./components/table";
+export * from "./components/segmented";
 export { cn } from "./lib/cn";
