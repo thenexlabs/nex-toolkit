@@ -1,6 +1,6 @@
 {
   "name": "@thenexlabs/tokens",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "NEX Level Labs design tokens: CSS variables, Tailwind preset and JS/TS exports",
   "license": "UNLICENSED",
   "repository": {

@@ -107,7 +107,7 @@ test("every brand and mode defines the same tokens", () => {
       assert.deepEqual(Object.keys(m.color).sort(), Object.keys(ref.color).sort(), `${b}.${mode}.color`);
       assert.deepEqual(Object.keys(m.shadow).sort(), Object.keys(ref.shadow).sort(), `${b}.${mode}.shadow`);
     }
-    assert.deepEqual(Object.keys(brand.fontFamily).sort(), ["display", "mono", "sans"], `${b}.fontFamily`);
+    assert.deepEqual(Object.keys(brand.fontFamily).sort(), ["display", "mono", "sans", "title"], `${b}.fontFamily`);
   }
 });
 
@@ -135,7 +135,7 @@ test("generated outputs exist and load", () => {
   assert.equal(preset.theme.extend.letterSpacing.caps, "var(--nex-tracking-caps)");
   const ns = preset.createNexPreset({ colorNamespace: "nex", fonts: false });
   assert.ok(ns.theme.extend.colors.nex.accent);
-  assert.deepEqual(Object.keys(ns.theme.extend.fontFamily), ["display"], "fonts:false keeps only the new 'display' name");
+  assert.deepEqual(Object.keys(ns.theme.extend.fontFamily), ["display", "title"], "fonts:false keeps only the new 'display' and 'title' names");
 
   const lib = require("../dist/index.cjs");
   assert.equal(lib.cssVar.color.accent, "rgb(var(--nex-color-accent))");
@@ -143,6 +143,7 @@ test("generated outputs exist and load", () => {
   assert.equal(lib.toLegacyKitColors("dark").primary, "#00FF41");
   assert.equal(lib.toLegacyKitColors("dark", "nixguard").primary, "#16A36A");
   assert.equal(lib.cssVar.font.display, "var(--nex-font-display)");
+  assert.equal(lib.cssVar.font.title, "var(--nex-font-title)");
 
   const css = readFileSync(join(root, "dist/tokens.css"), "utf8");
   assert.match(css, /--nex-color-accent: 0 255 65;/);
