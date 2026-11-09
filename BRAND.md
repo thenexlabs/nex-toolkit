@@ -81,12 +81,15 @@ Values come from the NixGuard brand board (2026-09).
 | **Mist** | `#A5AEA9` | Muted text on dark (7.9:1 on Graphite) |
 | **Amber** | `#F2B84B` | Warning |
 | **Signal Red** | `#E05252` | Danger on dark. On light it deepens to `#C43B3B` (fill) and `#B03030` (text), because `#E05252` on white is 3.8:1. |
+| **Pine** | `#0F1F17` | The app's frame (`bg-frame`): top bar, toolbar rows, the dock. Steps: `#15281E` dialog header bands (`bg-frame-raised`), `#1C3226` a selected segment or section (`bg-selected`), `#20362A` lines on the frame (`border-frame-line`). From the marketing site's dark ground. |
+| **Sage** | `#E4EEE7` | Pine's light counterpart, for light sections. |
 
 ### Type
 
 | Family | Use |
 |---|---|
-| **Geist** | Headlines and UI in the product app; body text everywhere |
+| **Geist** | UI and body text in the product app; body text everywhere |
+| **Bricolage Grotesque** (`font-title`) | Titles in the product app (dialog, panel, card and section titles) and the wordmark. The marketing site's headline face, so the app and the site read as one product. Load the variable font with its optical-size axis. |
 | **Geist Mono** | Data and commands: logs, IDs, control IDs, CLI, numbers in tables |
 | **Instrument Serif** (`font-display`) | **Marketing headlines only**, as in the landing page hero ("Get compliant faster. Stay protected after."). Never use it in the product app, in body copy or below `text-3xl`. |
 
@@ -96,6 +99,13 @@ Values come from the NixGuard brand board (2026-09).
 2. Black anchors trust and authority.
 3. Use Bone for clarity and balance.
 4. Reserve accent colours for status and alerts.
+
+### In the product app (D2, 2026-11-07)
+
+- **Text is white or black.** Bone, Mist or Stone on dark grounds; black on an Emerald fill. No green words, so nothing reads green on green.
+- **Components keep the green.** The one main action is an Emerald key with black text. Selected segments, tabs and sections sit on Pine with an Emerald edge or rail. Checkboxes, progress bars and done marks are Emerald.
+- **Depth is drawn, never glowed.** Buttons are raised keys (`shadow-key`, `shadow-key-accent`), inputs and tracks are sunk (`shadow-well`), cards have a one-pixel light top edge (`shadow-panel`).
+- **The frame is Pine** (top bar, toolbars, dock, dialog headers); the work stays on Carbon and Graphite.
 
 ### Modes
 
@@ -115,6 +125,7 @@ NixGuard has **no neon bloom**. Its `glow-*` tokens are quiet emerald rings, use
 - Use purple, violet or any off-palette colour in illustrations. Illustration grounds come from the palette, with Amber as the only secondary hue.
 - Use pill-shaped buttons. All buttons, marketing CTAs included, use `rounded-control`.
 - Use cyan.
+- Use green for words in the product app, or fill a main action with Bone.
 
 ### Mascots
 
